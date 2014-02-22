@@ -30,7 +30,8 @@ LIBDIR = $(PREFIX)/lib
 .PHONY: clean
 
 CC = clang
-CFLAGS = -Wall -Wmissing-prototypes -pedantic -fPIC -g @CFLAGS@
+CFLAGS = -Wall -Wmissing-prototypes -Wunreachable-code -pedantic \
+                                    -fPIC -g @CFLAGS@
 LDFLAGS = @LDFLAGS@ -shared
 
 MAJOR = 1
