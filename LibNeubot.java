@@ -7,6 +7,7 @@ public class LibNeubot {
     // Structs:
 
     //struct NeubotEchoServer;
+    //struct NeubotHttpClient;
     //struct NeubotPollable;
     //struct NeubotPoller;
 
@@ -30,6 +31,39 @@ public class LibNeubot {
 
     public final static native long NeubotEchoServer_construct(long poller, 
         int use_ipv6, String address, String port);
+
+    // NeubotHttpClient API:
+
+    public final static native long NeubotHttpClient_construct(long poller, 
+        String handle_begin, String handle_body, String handle_close, 
+        String handle_connect, String handle_end, String handle_flush, 
+        String handle_headers, long opaque);
+
+    public final static native int NeubotHttpClient_connect(long self, 
+        String family, String address, String port);
+
+    public final static native int NeubotHttpClient_write(long self, 
+        String data, size_t count);
+
+    public final static native int NeubotHttpClient_writes(long self, 
+        String str);
+
+    public final static native int NeubotHttpClient_flush(long self);
+
+    public final static native int NeubotHttpClient_code(long self);
+
+    public final static native String NeubotHttpClient_reason(long self);
+
+    public final static native String NeubotHttpClient_header(long self, 
+        String key);
+
+    public final static native size_t NeubotHttpClient_body_length(
+        long self);
+
+    public final static native String NeubotHttpClient_body_string(
+        long self);
+
+    public final static native void NeubotHttpClient_close(long self);
 
     // NeubotPollable API:
 

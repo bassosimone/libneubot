@@ -21,6 +21,7 @@ typedef void (*neubot_slot_vos)(void *, const char *);
 /* Classes: */
 
 struct NeubotEchoServer;
+struct NeubotHttpClient;
 struct NeubotPollable;
 struct NeubotPoller;
 
@@ -28,6 +29,33 @@ struct NeubotPoller;
 
 struct NeubotEchoServer *NeubotEchoServer_construct(struct NeubotPoller *, 
     int, const char *, const char *);
+
+/* NeubotHttpClient API: */
+
+struct NeubotHttpClient *NeubotHttpClient_construct(struct NeubotPoller *, 
+    neubot_slot_vo, neubot_slot_vo, neubot_slot_vo, neubot_slot_vo, 
+    neubot_slot_vo, neubot_slot_vo, neubot_slot_vo, void *);
+
+int NeubotHttpClient_connect(struct NeubotHttpClient *, const char *, 
+    const char *, const char *);
+
+int NeubotHttpClient_write(struct NeubotHttpClient *, const char *, size_t);
+
+int NeubotHttpClient_writes(struct NeubotHttpClient *, const char *);
+
+int NeubotHttpClient_flush(struct NeubotHttpClient *);
+
+int NeubotHttpClient_code(struct NeubotHttpClient *);
+
+const char *NeubotHttpClient_reason(struct NeubotHttpClient *);
+
+const char *NeubotHttpClient_header(struct NeubotHttpClient *, const char *);
+
+size_t NeubotHttpClient_body_length(struct NeubotHttpClient *);
+
+const char *NeubotHttpClient_body_string(struct NeubotHttpClient *);
+
+void NeubotHttpClient_close(struct NeubotHttpClient *);
 
 /* NeubotPollable API: */
 

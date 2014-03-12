@@ -41,6 +41,79 @@ LIBNEUBOT.NeubotEchoServer_construct.argtypes = (
 )
 
 #
+# NeubotHttpClient prototypes:
+#
+
+LIBNEUBOT.NeubotHttpClient_construct.restype = ctypes.c_void_p
+LIBNEUBOT.NeubotHttpClient_construct.argtypes = (
+    ctypes.c_void_p,
+    NEUBOT_SLOT_VO,
+    NEUBOT_SLOT_VO,
+    NEUBOT_SLOT_VO,
+    NEUBOT_SLOT_VO,
+    NEUBOT_SLOT_VO,
+    NEUBOT_SLOT_VO,
+    NEUBOT_SLOT_VO,
+    ctypes.py_object,
+)
+
+LIBNEUBOT.NeubotHttpClient_connect.restype = ctypes.c_int
+LIBNEUBOT.NeubotHttpClient_connect.argtypes = (
+    ctypes.c_void_p,
+    ctypes.c_char_p,
+    ctypes.c_char_p,
+    ctypes.c_char_p,
+)
+
+LIBNEUBOT.NeubotHttpClient_write.restype = ctypes.c_int
+LIBNEUBOT.NeubotHttpClient_write.argtypes = (
+    ctypes.c_void_p,
+    ctypes.c_char_p,
+    ctypes.c_size_t,
+)
+
+LIBNEUBOT.NeubotHttpClient_writes.restype = ctypes.c_int
+LIBNEUBOT.NeubotHttpClient_writes.argtypes = (
+    ctypes.c_void_p,
+    ctypes.c_char_p,
+)
+
+LIBNEUBOT.NeubotHttpClient_flush.restype = ctypes.c_int
+LIBNEUBOT.NeubotHttpClient_flush.argtypes = (
+    ctypes.c_void_p,
+)
+
+LIBNEUBOT.NeubotHttpClient_code.restype = ctypes.c_int
+LIBNEUBOT.NeubotHttpClient_code.argtypes = (
+    ctypes.c_void_p,
+)
+
+LIBNEUBOT.NeubotHttpClient_reason.restype = ctypes.c_char_p
+LIBNEUBOT.NeubotHttpClient_reason.argtypes = (
+    ctypes.c_void_p,
+)
+
+LIBNEUBOT.NeubotHttpClient_header.restype = ctypes.c_char_p
+LIBNEUBOT.NeubotHttpClient_header.argtypes = (
+    ctypes.c_void_p,
+    ctypes.c_char_p,
+)
+
+LIBNEUBOT.NeubotHttpClient_body_length.restype = ctypes.c_size_t
+LIBNEUBOT.NeubotHttpClient_body_length.argtypes = (
+    ctypes.c_void_p,
+)
+
+LIBNEUBOT.NeubotHttpClient_body_string.restype = ctypes.c_char_p
+LIBNEUBOT.NeubotHttpClient_body_string.argtypes = (
+    ctypes.c_void_p,
+)
+
+LIBNEUBOT.NeubotHttpClient_close.argtypes = (
+    ctypes.c_void_p,
+)
+
+#
 # NeubotPollable prototypes:
 #
 
@@ -170,6 +243,180 @@ class EchoServer(object):
         # From now on we can destroy this object
         self._can_destroy = True
         LIBNEUBOT_OBJECTS.add(self)
+
+#
+# NeubotHttpClient wrapper:
+#
+
+class HttpClient(object):
+
+    #
+    # <Slots>
+    #
+
+    def handle_begin(self):
+        pass
+
+    @staticmethod
+    def _handle_begin_(opaque):
+        # pylint: disable = W0702
+        try:
+            opaque.handle_begin()
+        except:
+            logging.warning('Exception', exc_info=1)
+            opaque.close()
+        # pylint: enable = W0702
+
+    def handle_body(self):
+        pass
+
+    @staticmethod
+    def _handle_body_(opaque):
+        # pylint: disable = W0702
+        try:
+            opaque.handle_body()
+        except:
+            logging.warning('Exception', exc_info=1)
+            opaque.close()
+        # pylint: enable = W0702
+
+    def handle_close(self):
+        pass
+
+    @staticmethod
+    def _handle_close_(opaque):
+        # pylint: disable = W0702
+        try:
+            opaque.handle_close()
+        except:
+            logging.warning('Exception', exc_info=1)
+            opaque.close()
+        # pylint: enable = W0702
+
+    def handle_connect(self):
+        pass
+
+    @staticmethod
+    def _handle_connect_(opaque):
+        # pylint: disable = W0702
+        try:
+            opaque.handle_connect()
+        except:
+            logging.warning('Exception', exc_info=1)
+            opaque.close()
+        # pylint: enable = W0702
+
+    def handle_end(self):
+        pass
+
+    @staticmethod
+    def _handle_end_(opaque):
+        # pylint: disable = W0702
+        try:
+            opaque.handle_end()
+        except:
+            logging.warning('Exception', exc_info=1)
+            opaque.close()
+        # pylint: enable = W0702
+
+    def handle_flush(self):
+        pass
+
+    @staticmethod
+    def _handle_flush_(opaque):
+        # pylint: disable = W0702
+        try:
+            opaque.handle_flush()
+        except:
+            logging.warning('Exception', exc_info=1)
+            opaque.close()
+        # pylint: enable = W0702
+
+    def handle_headers(self):
+        pass
+
+    @staticmethod
+    def _handle_headers_(opaque):
+        # pylint: disable = W0702
+        try:
+            opaque.handle_headers()
+        except:
+            logging.warning('Exception', exc_info=1)
+            opaque.close()
+        # pylint: enable = W0702
+
+    #
+    # </Slots>
+    #
+
+    def __init__(self, poller):
+        self._c_handle_begin_ = NEUBOT_SLOT_VO(self._handle_begin_)
+        self._c_handle_body_ = NEUBOT_SLOT_VO(self._handle_body_)
+        self._c_handle_close_ = NEUBOT_SLOT_VO(self._handle_close_)
+        self._c_handle_connect_ = NEUBOT_SLOT_VO(self._handle_connect_)
+        self._c_handle_end_ = NEUBOT_SLOT_VO(self._handle_end_)
+        self._c_handle_flush_ = NEUBOT_SLOT_VO(self._handle_flush_)
+        self._c_handle_headers_ = NEUBOT_SLOT_VO(self._handle_headers_)
+        self._c_self = ctypes.py_object(self)
+        # We cannot destroy until the object is complete
+        self._can_destroy = False
+        self._context = LIBNEUBOT.NeubotHttpClient_construct(poller._context,
+          self._c_handle_begin_, self._c_handle_body_, self._c_handle_close_,
+          self._c_handle_connect_, self._c_handle_end_, self._c_handle_flush_,
+          self._c_handle_headers_, self._c_self)
+        if not self._context:
+            raise RuntimeError('out of memory')
+        # From now on we can destroy this object
+        self._can_destroy = True
+        LIBNEUBOT_OBJECTS.add(self)
+
+    def connect(self, family, address, port):
+        retval = LIBNEUBOT.NeubotHttpClient_connect(self._context, family,
+          address, port)
+        if retval != 0:
+            raise RuntimeError('connect failed')
+        return retval
+
+    def write(self, data, count):
+        retval = LIBNEUBOT.NeubotHttpClient_write(self._context, data, count)
+        if retval != 0:
+            raise RuntimeError('write failed')
+        return retval
+
+    def writes(self, str):
+        retval = LIBNEUBOT.NeubotHttpClient_writes(self._context, str)
+        if retval != 0:
+            raise RuntimeError('writes failed')
+        return retval
+
+    def flush(self):
+        retval = LIBNEUBOT.NeubotHttpClient_flush(self._context)
+        if retval != 0:
+            raise RuntimeError('flush failed')
+        return retval
+
+    def code(self):
+        return LIBNEUBOT.NeubotHttpClient_code(self._context)
+
+    def reason(self):
+        return LIBNEUBOT.NeubotHttpClient_reason(self._context)
+
+    def header(self, key):
+        return LIBNEUBOT.NeubotHttpClient_header(self._context, key)
+
+    def body_length(self):
+        return LIBNEUBOT.NeubotHttpClient_body_length(self._context)
+
+    def body_string(self):
+        return LIBNEUBOT.NeubotHttpClient_body_string(self._context)
+
+    def close(self):
+        if not self._can_destroy:
+            return
+        # Idempotent destructor for safety
+        self._can_destroy = False
+        LIBNEUBOT_OBJECTS.remove(self)
+        LIBNEUBOT.NeubotHttpClient_close(self._context)
 
 #
 # NeubotPollable wrapper:

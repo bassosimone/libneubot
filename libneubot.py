@@ -26,6 +26,7 @@ NEUBOT_HOOK_VOS = ctypes.CFUNCTYPE(None, ctypes.py_object,
 # Classes:
 
 # struct NeubotEchoServer
+# struct NeubotHttpClient
 # struct NeubotPollable
 # struct NeubotPoller
 
@@ -47,6 +48,135 @@ def NeubotEchoServer_construct(poller, use_ipv6, address, port):
     if not ret:
         raise RuntimeError('LibNeubot error')
     return ret
+
+# NeubotHttpClient API:
+
+LIBNEUBOT.NeubotHttpClient_construct.restype = ctypes.c_void_p
+LIBNEUBOT.NeubotHttpClient_construct.argtypes = (
+    ctypes.c_void_p,
+    NEUBOT_SLOT_VO,
+    NEUBOT_SLOT_VO,
+    NEUBOT_SLOT_VO,
+    NEUBOT_SLOT_VO,
+    NEUBOT_SLOT_VO,
+    NEUBOT_SLOT_VO,
+    NEUBOT_SLOT_VO,
+    ctypes.py_object,
+)
+
+def NeubotHttpClient_construct(poller, handle_begin, handle_body, 
+      handle_close, handle_connect, handle_end, handle_flush, 
+      handle_headers, opaque):
+    ret = LIBNEUBOT.NeubotHttpClient_construct(poller, handle_begin, 
+      handle_body, handle_close, handle_connect, handle_end, 
+      handle_flush, handle_headers, opaque)
+    if not ret:
+        raise RuntimeError('LibNeubot error')
+    return ret
+
+LIBNEUBOT.NeubotHttpClient_connect.restype = ctypes.c_int
+LIBNEUBOT.NeubotHttpClient_connect.argtypes = (
+    ctypes.c_void_p,
+    ctypes.c_char_p,
+    ctypes.c_char_p,
+    ctypes.c_char_p,
+)
+
+def NeubotHttpClient_connect(handle, family, address, port):
+    ret = LIBNEUBOT.NeubotHttpClient_connect(handle, family, address, 
+      port)
+    if ret != 0:
+        raise RuntimeError('LibNeubot error')
+    return ret
+
+LIBNEUBOT.NeubotHttpClient_write.restype = ctypes.c_int
+LIBNEUBOT.NeubotHttpClient_write.argtypes = (
+    ctypes.c_void_p,
+    ctypes.c_char_p,
+    size_t,
+)
+
+def NeubotHttpClient_write(handle, data, count):
+    ret = LIBNEUBOT.NeubotHttpClient_write(handle, data, count)
+    if ret != 0:
+        raise RuntimeError('LibNeubot error')
+    return ret
+
+LIBNEUBOT.NeubotHttpClient_writes.restype = ctypes.c_int
+LIBNEUBOT.NeubotHttpClient_writes.argtypes = (
+    ctypes.c_void_p,
+    ctypes.c_char_p,
+)
+
+def NeubotHttpClient_writes(handle, str):
+    ret = LIBNEUBOT.NeubotHttpClient_writes(handle, str)
+    if ret != 0:
+        raise RuntimeError('LibNeubot error')
+    return ret
+
+LIBNEUBOT.NeubotHttpClient_flush.restype = ctypes.c_int
+LIBNEUBOT.NeubotHttpClient_flush.argtypes = (
+    ctypes.c_void_p,
+)
+
+def NeubotHttpClient_flush(handle):
+    ret = LIBNEUBOT.NeubotHttpClient_flush(handle)
+    if ret != 0:
+        raise RuntimeError('LibNeubot error')
+    return ret
+
+LIBNEUBOT.NeubotHttpClient_code.restype = ctypes.c_int
+LIBNEUBOT.NeubotHttpClient_code.argtypes = (
+    ctypes.c_void_p,
+)
+
+def NeubotHttpClient_code(handle):
+    ret = LIBNEUBOT.NeubotHttpClient_code(handle)
+    return ret
+
+LIBNEUBOT.NeubotHttpClient_reason.restype = ctypes.c_char_p
+LIBNEUBOT.NeubotHttpClient_reason.argtypes = (
+    ctypes.c_void_p,
+)
+
+def NeubotHttpClient_reason(handle):
+    ret = LIBNEUBOT.NeubotHttpClient_reason(handle)
+    return ret
+
+LIBNEUBOT.NeubotHttpClient_header.restype = ctypes.c_char_p
+LIBNEUBOT.NeubotHttpClient_header.argtypes = (
+    ctypes.c_void_p,
+    ctypes.c_char_p,
+)
+
+def NeubotHttpClient_header(handle, key):
+    ret = LIBNEUBOT.NeubotHttpClient_header(handle, key)
+    return ret
+
+LIBNEUBOT.NeubotHttpClient_body_length.restype = size_t
+LIBNEUBOT.NeubotHttpClient_body_length.argtypes = (
+    ctypes.c_void_p,
+)
+
+def NeubotHttpClient_body_length(handle):
+    ret = LIBNEUBOT.NeubotHttpClient_body_length(handle)
+    return ret
+
+LIBNEUBOT.NeubotHttpClient_body_string.restype = ctypes.c_char_p
+LIBNEUBOT.NeubotHttpClient_body_string.argtypes = (
+    ctypes.c_void_p,
+)
+
+def NeubotHttpClient_body_string(handle):
+    ret = LIBNEUBOT.NeubotHttpClient_body_string(handle)
+    return ret
+
+LIBNEUBOT.NeubotHttpClient_close.argtypes = (
+    ctypes.c_void_p,
+)
+
+def NeubotHttpClient_close(handle):
+    LIBNEUBOT.NeubotHttpClient_close(handle)
 
 # NeubotPollable API:
 
