@@ -335,6 +335,7 @@ def main():
         "long long": "ctypes.c_longlong",
         "status_t": "ctypes.c_int",
         "void_p": "ctypes.c_void_p",
+        "size_t": "ctypes.c_size_t",
     }
 
     # Process all class names once, to register all the types

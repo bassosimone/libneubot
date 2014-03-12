@@ -11,6 +11,7 @@ namespace Neubot {
 #include <neubot.h>
 
     class EchoServer;
+    class HttpClient;
     class Pollable;
     class Poller;
 
@@ -32,6 +33,121 @@ namespace Neubot {
               (struct NeubotPoller *) poller, use_ipv6, address, port);
             if (this->_context == NULL)
                 throw new std::bad_alloc();
+        };
+
+    };
+
+    class HttpClient {
+        struct NeubotHttpClient *_context;
+
+        static void handle_begin__(void *opaque) {
+            HttpClient *self = (HttpClient *) opaque;
+            self->handle_begin();
+        };
+
+        static void handle_body__(void *opaque) {
+            HttpClient *self = (HttpClient *) opaque;
+            self->handle_body();
+        };
+
+        static void handle_close__(void *opaque) {
+            HttpClient *self = (HttpClient *) opaque;
+            self->handle_close();
+        };
+
+        static void handle_connect__(void *opaque) {
+            HttpClient *self = (HttpClient *) opaque;
+            self->handle_connect();
+        };
+
+        static void handle_end__(void *opaque) {
+            HttpClient *self = (HttpClient *) opaque;
+            self->handle_end();
+        };
+
+        static void handle_flush__(void *opaque) {
+            HttpClient *self = (HttpClient *) opaque;
+            self->handle_flush();
+        };
+
+        static void handle_headers__(void *opaque) {
+            HttpClient *self = (HttpClient *) opaque;
+            self->handle_headers();
+        };
+
+      public:
+
+// Swig doesn't understand the cast operator
+#ifndef SWIG
+        operator struct NeubotHttpClient *(void) {
+            return (this->_context);
+        }
+#endif
+
+        virtual void handle_begin(void) = 0;
+
+        virtual void handle_body(void) = 0;
+
+        virtual void handle_close(void) = 0;
+
+        virtual void handle_connect(void) = 0;
+
+        virtual void handle_end(void) = 0;
+
+        virtual void handle_flush(void) = 0;
+
+        virtual void handle_headers(void) = 0;
+
+        HttpClient(Poller *poller) {
+            this->_context = NeubotHttpClient_construct(
+              (struct NeubotPoller *) poller, this->handle_begin__,
+              this->handle_body__, this->handle_close__,
+              this->handle_connect__, this->handle_end__, this->handle_flush__,
+              this->handle_headers__, this);
+            if (this->_context == NULL)
+                throw new std::bad_alloc();
+        };
+
+        int connect(const char *family, const char *address,
+          const char *port) {
+            return (NeubotHttpClient_connect(this->_context, family, address,
+              port));
+        };
+
+        int write(const char *data, size_t count) {
+            return (NeubotHttpClient_write(this->_context, data, count));
+        };
+
+        int writes(const char *str) {
+            return (NeubotHttpClient_writes(this->_context, str));
+        };
+
+        int flush(void) {
+            return (NeubotHttpClient_flush(this->_context));
+        };
+
+        int code(void) {
+            return (NeubotHttpClient_code(this->_context));
+        };
+
+        const char *reason(void) {
+            return (NeubotHttpClient_reason(this->_context));
+        };
+
+        const char *header(const char *key) {
+            return (NeubotHttpClient_header(this->_context, key));
+        };
+
+        size_t body_length(void) {
+            return (NeubotHttpClient_body_length(this->_context));
+        };
+
+        const char *body_string(void) {
+            return (NeubotHttpClient_body_string(this->_context));
+        };
+
+        virtual ~HttpClient(void) {
+            NeubotHttpClient_close(this->_context);
         };
 
     };

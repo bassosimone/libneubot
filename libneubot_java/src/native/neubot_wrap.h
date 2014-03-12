@@ -11,6 +11,27 @@
 #ifndef SWIG_LibNeubot_WRAP_H_
 #define SWIG_LibNeubot_WRAP_H_
 
+class SwigDirector_HttpClient : public Neubot::HttpClient, public Swig::Director {
+
+public:
+    void swig_connect_director(JNIEnv *jenv, jobject jself, jclass jcls, bool swig_mem_own, bool weak_global);
+    SwigDirector_HttpClient(JNIEnv *jenv, Neubot::Poller *poller);
+    virtual void handle_begin();
+    virtual void handle_body();
+    virtual void handle_close();
+    virtual void handle_connect();
+    virtual void handle_end();
+    virtual void handle_flush();
+    virtual void handle_headers();
+    virtual ~SwigDirector_HttpClient();
+public:
+    bool swig_overrides(int n) {
+      return (n < 7 ? swig_override[n] : false);
+    }
+protected:
+    bool swig_override[7];
+};
+
 class SwigDirector_Pollable : public Neubot::Pollable, public Swig::Director {
 
 public:

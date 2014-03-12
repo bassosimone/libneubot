@@ -12,6 +12,24 @@
                 ["cstring", "port"]]
         ],
 
+        "NeubotHttpClient": [
+            ["__construct__", ["NeubotPoller_p", "poller"], [
+                "slot_vo", ["handle_begin", "handle_body", "handle_close",
+                "handle_connect", "handle_end", "handle_flush",
+                "handle_headers"]]],
+            ["status_t", "connect", ["cstring", "family"],
+                ["cstring", "address"], ["cstring", "port"]],
+            ["status_t", "write", ["cstring", "data"], ["size_t", "count"]],
+            ["status_t", "writes", ["cstring", "str"]],
+            ["status_t", "flush"],
+            ["int", "code"],
+            ["cstring", "reason"],
+            ["cstring", "header", ["cstring", "key"]],
+            ["size_t", "body_length"],
+            ["cstring", "body_string"],
+            ["__destruct__", "close"]
+        ],
+
         "NeubotPollable": [
             ["__construct__", ["NeubotPoller_p", "poller"], ["slot_vo",
                 ["handle_read", "handle_write", "handle_close"]]],

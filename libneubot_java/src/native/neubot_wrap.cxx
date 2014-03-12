@@ -412,7 +412,7 @@ namespace Swig {
 namespace Swig {
   namespace {
     jclass jclass_LibNeubotJNI = NULL;
-    jmethodID director_methids[3];
+    jmethodID director_methids[10];
   }
 }
 
@@ -425,6 +425,201 @@ namespace Swig {
  * --------------------------------------------------- */
 
 #include "neubot_wrap.h"
+
+SwigDirector_HttpClient::SwigDirector_HttpClient(JNIEnv *jenv, Neubot::Poller *poller) : Neubot::HttpClient(poller), Swig::Director(jenv) {
+}
+
+void SwigDirector_HttpClient::handle_begin() {
+  JNIEnvWrapper swigjnienv(this) ;
+  JNIEnv * jenv = swigjnienv.getJNIEnv() ;
+  jobject swigjobj = (jobject) NULL ;
+  
+  if (!swig_override[0]) {
+    SWIG_JavaThrowException(JNIEnvWrapper(this).getJNIEnv(), SWIG_JavaDirectorPureVirtual, "Attempted to invoke pure virtual method Neubot::HttpClient::handle_begin.");
+    return;
+  }
+  swigjobj = swig_get_self(jenv);
+  if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
+    jenv->CallStaticVoidMethod(Swig::jclass_LibNeubotJNI, Swig::director_methids[0], swigjobj);
+    if (jenv->ExceptionCheck() == JNI_TRUE) return ;
+  } else {
+    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null upcall object");
+  }
+  if (swigjobj) jenv->DeleteLocalRef(swigjobj);
+}
+
+void SwigDirector_HttpClient::handle_body() {
+  JNIEnvWrapper swigjnienv(this) ;
+  JNIEnv * jenv = swigjnienv.getJNIEnv() ;
+  jobject swigjobj = (jobject) NULL ;
+  
+  if (!swig_override[1]) {
+    SWIG_JavaThrowException(JNIEnvWrapper(this).getJNIEnv(), SWIG_JavaDirectorPureVirtual, "Attempted to invoke pure virtual method Neubot::HttpClient::handle_body.");
+    return;
+  }
+  swigjobj = swig_get_self(jenv);
+  if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
+    jenv->CallStaticVoidMethod(Swig::jclass_LibNeubotJNI, Swig::director_methids[1], swigjobj);
+    if (jenv->ExceptionCheck() == JNI_TRUE) return ;
+  } else {
+    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null upcall object");
+  }
+  if (swigjobj) jenv->DeleteLocalRef(swigjobj);
+}
+
+void SwigDirector_HttpClient::handle_close() {
+  JNIEnvWrapper swigjnienv(this) ;
+  JNIEnv * jenv = swigjnienv.getJNIEnv() ;
+  jobject swigjobj = (jobject) NULL ;
+  
+  if (!swig_override[2]) {
+    SWIG_JavaThrowException(JNIEnvWrapper(this).getJNIEnv(), SWIG_JavaDirectorPureVirtual, "Attempted to invoke pure virtual method Neubot::HttpClient::handle_close.");
+    return;
+  }
+  swigjobj = swig_get_self(jenv);
+  if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
+    jenv->CallStaticVoidMethod(Swig::jclass_LibNeubotJNI, Swig::director_methids[2], swigjobj);
+    if (jenv->ExceptionCheck() == JNI_TRUE) return ;
+  } else {
+    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null upcall object");
+  }
+  if (swigjobj) jenv->DeleteLocalRef(swigjobj);
+}
+
+void SwigDirector_HttpClient::handle_connect() {
+  JNIEnvWrapper swigjnienv(this) ;
+  JNIEnv * jenv = swigjnienv.getJNIEnv() ;
+  jobject swigjobj = (jobject) NULL ;
+  
+  if (!swig_override[3]) {
+    SWIG_JavaThrowException(JNIEnvWrapper(this).getJNIEnv(), SWIG_JavaDirectorPureVirtual, "Attempted to invoke pure virtual method Neubot::HttpClient::handle_connect.");
+    return;
+  }
+  swigjobj = swig_get_self(jenv);
+  if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
+    jenv->CallStaticVoidMethod(Swig::jclass_LibNeubotJNI, Swig::director_methids[3], swigjobj);
+    if (jenv->ExceptionCheck() == JNI_TRUE) return ;
+  } else {
+    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null upcall object");
+  }
+  if (swigjobj) jenv->DeleteLocalRef(swigjobj);
+}
+
+void SwigDirector_HttpClient::handle_end() {
+  JNIEnvWrapper swigjnienv(this) ;
+  JNIEnv * jenv = swigjnienv.getJNIEnv() ;
+  jobject swigjobj = (jobject) NULL ;
+  
+  if (!swig_override[4]) {
+    SWIG_JavaThrowException(JNIEnvWrapper(this).getJNIEnv(), SWIG_JavaDirectorPureVirtual, "Attempted to invoke pure virtual method Neubot::HttpClient::handle_end.");
+    return;
+  }
+  swigjobj = swig_get_self(jenv);
+  if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
+    jenv->CallStaticVoidMethod(Swig::jclass_LibNeubotJNI, Swig::director_methids[4], swigjobj);
+    if (jenv->ExceptionCheck() == JNI_TRUE) return ;
+  } else {
+    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null upcall object");
+  }
+  if (swigjobj) jenv->DeleteLocalRef(swigjobj);
+}
+
+void SwigDirector_HttpClient::handle_flush() {
+  JNIEnvWrapper swigjnienv(this) ;
+  JNIEnv * jenv = swigjnienv.getJNIEnv() ;
+  jobject swigjobj = (jobject) NULL ;
+  
+  if (!swig_override[5]) {
+    SWIG_JavaThrowException(JNIEnvWrapper(this).getJNIEnv(), SWIG_JavaDirectorPureVirtual, "Attempted to invoke pure virtual method Neubot::HttpClient::handle_flush.");
+    return;
+  }
+  swigjobj = swig_get_self(jenv);
+  if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
+    jenv->CallStaticVoidMethod(Swig::jclass_LibNeubotJNI, Swig::director_methids[5], swigjobj);
+    if (jenv->ExceptionCheck() == JNI_TRUE) return ;
+  } else {
+    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null upcall object");
+  }
+  if (swigjobj) jenv->DeleteLocalRef(swigjobj);
+}
+
+void SwigDirector_HttpClient::handle_headers() {
+  JNIEnvWrapper swigjnienv(this) ;
+  JNIEnv * jenv = swigjnienv.getJNIEnv() ;
+  jobject swigjobj = (jobject) NULL ;
+  
+  if (!swig_override[6]) {
+    SWIG_JavaThrowException(JNIEnvWrapper(this).getJNIEnv(), SWIG_JavaDirectorPureVirtual, "Attempted to invoke pure virtual method Neubot::HttpClient::handle_headers.");
+    return;
+  }
+  swigjobj = swig_get_self(jenv);
+  if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
+    jenv->CallStaticVoidMethod(Swig::jclass_LibNeubotJNI, Swig::director_methids[6], swigjobj);
+    if (jenv->ExceptionCheck() == JNI_TRUE) return ;
+  } else {
+    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null upcall object");
+  }
+  if (swigjobj) jenv->DeleteLocalRef(swigjobj);
+}
+
+SwigDirector_HttpClient::~SwigDirector_HttpClient() {
+  swig_disconnect_director_self("swigDirectorDisconnect");
+}
+
+
+void SwigDirector_HttpClient::swig_connect_director(JNIEnv *jenv, jobject jself, jclass jcls, bool swig_mem_own, bool weak_global) {
+  static struct {
+    const char *mname;
+    const char *mdesc;
+    jmethodID base_methid;
+  } methods[] = {
+    {
+      "handle_begin", "()V", NULL 
+    },
+    {
+      "handle_body", "()V", NULL 
+    },
+    {
+      "handle_close", "()V", NULL 
+    },
+    {
+      "handle_connect", "()V", NULL 
+    },
+    {
+      "handle_end", "()V", NULL 
+    },
+    {
+      "handle_flush", "()V", NULL 
+    },
+    {
+      "handle_headers", "()V", NULL 
+    }
+  };
+  
+  static jclass baseclass = 0 ;
+  
+  if (swig_set_self(jenv, jself, swig_mem_own, weak_global)) {
+    if (!baseclass) {
+      baseclass = jenv->FindClass("org/neubot/swig/HttpClient");
+      if (!baseclass) return;
+      baseclass = (jclass) jenv->NewGlobalRef(baseclass);
+    }
+    bool derived = (jenv->IsSameObject(baseclass, jcls) ? false : true);
+    for (int i = 0; i < 7; ++i) {
+      if (!methods[i].base_methid) {
+        methods[i].base_methid = jenv->GetMethodID(baseclass, methods[i].mname, methods[i].mdesc);
+        if (!methods[i].base_methid) return;
+      }
+      swig_override[i] = false;
+      if (derived) {
+        jmethodID methid = jenv->GetMethodID(jcls, methods[i].mname, methods[i].mdesc);
+        swig_override[i] = (methid != methods[i].base_methid);
+        jenv->ExceptionClear();
+      }
+    }
+  }
+}
+
 
 SwigDirector_Pollable::SwigDirector_Pollable(JNIEnv *jenv, Neubot::Poller *poller) : Neubot::Pollable(poller), Swig::Director(jenv) {
 }
@@ -440,7 +635,7 @@ void SwigDirector_Pollable::handle_read() {
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
-    jenv->CallStaticVoidMethod(Swig::jclass_LibNeubotJNI, Swig::director_methids[0], swigjobj);
+    jenv->CallStaticVoidMethod(Swig::jclass_LibNeubotJNI, Swig::director_methids[7], swigjobj);
     if (jenv->ExceptionCheck() == JNI_TRUE) return ;
   } else {
     SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null upcall object");
@@ -459,7 +654,7 @@ void SwigDirector_Pollable::handle_write() {
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
-    jenv->CallStaticVoidMethod(Swig::jclass_LibNeubotJNI, Swig::director_methids[1], swigjobj);
+    jenv->CallStaticVoidMethod(Swig::jclass_LibNeubotJNI, Swig::director_methids[8], swigjobj);
     if (jenv->ExceptionCheck() == JNI_TRUE) return ;
   } else {
     SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null upcall object");
@@ -478,7 +673,7 @@ void SwigDirector_Pollable::handle_close() {
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
-    jenv->CallStaticVoidMethod(Swig::jclass_LibNeubotJNI, Swig::director_methids[2], swigjobj);
+    jenv->CallStaticVoidMethod(Swig::jclass_LibNeubotJNI, Swig::director_methids[9], swigjobj);
     if (jenv->ExceptionCheck() == JNI_TRUE) return ;
   } else {
     SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null upcall object");
@@ -576,6 +771,307 @@ SWIGEXPORT void JNICALL Java_org_neubot_swig_LibNeubotJNI_delete_1EchoServer(JNI
   (void)jcls;
   arg1 = *(Neubot::EchoServer **)&jarg1; 
   delete arg1;
+}
+
+
+SWIGEXPORT void JNICALL Java_org_neubot_swig_LibNeubotJNI_HttpClient_1handle_1begin(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  Neubot::HttpClient *arg1 = (Neubot::HttpClient *) 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(Neubot::HttpClient **)&jarg1; 
+  (arg1)->handle_begin();
+}
+
+
+SWIGEXPORT void JNICALL Java_org_neubot_swig_LibNeubotJNI_HttpClient_1handle_1body(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  Neubot::HttpClient *arg1 = (Neubot::HttpClient *) 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(Neubot::HttpClient **)&jarg1; 
+  (arg1)->handle_body();
+}
+
+
+SWIGEXPORT void JNICALL Java_org_neubot_swig_LibNeubotJNI_HttpClient_1handle_1close(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  Neubot::HttpClient *arg1 = (Neubot::HttpClient *) 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(Neubot::HttpClient **)&jarg1; 
+  (arg1)->handle_close();
+}
+
+
+SWIGEXPORT void JNICALL Java_org_neubot_swig_LibNeubotJNI_HttpClient_1handle_1connect(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  Neubot::HttpClient *arg1 = (Neubot::HttpClient *) 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(Neubot::HttpClient **)&jarg1; 
+  (arg1)->handle_connect();
+}
+
+
+SWIGEXPORT void JNICALL Java_org_neubot_swig_LibNeubotJNI_HttpClient_1handle_1end(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  Neubot::HttpClient *arg1 = (Neubot::HttpClient *) 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(Neubot::HttpClient **)&jarg1; 
+  (arg1)->handle_end();
+}
+
+
+SWIGEXPORT void JNICALL Java_org_neubot_swig_LibNeubotJNI_HttpClient_1handle_1flush(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  Neubot::HttpClient *arg1 = (Neubot::HttpClient *) 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(Neubot::HttpClient **)&jarg1; 
+  (arg1)->handle_flush();
+}
+
+
+SWIGEXPORT void JNICALL Java_org_neubot_swig_LibNeubotJNI_HttpClient_1handle_1headers(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  Neubot::HttpClient *arg1 = (Neubot::HttpClient *) 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(Neubot::HttpClient **)&jarg1; 
+  (arg1)->handle_headers();
+}
+
+
+SWIGEXPORT jlong JNICALL Java_org_neubot_swig_LibNeubotJNI_new_1HttpClient(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jlong jresult = 0 ;
+  Neubot::Poller *arg1 = (Neubot::Poller *) 0 ;
+  Neubot::HttpClient *result = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(Neubot::Poller **)&jarg1; 
+  result = (Neubot::HttpClient *)new SwigDirector_HttpClient(jenv,arg1);
+  *(Neubot::HttpClient **)&jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jint JNICALL Java_org_neubot_swig_LibNeubotJNI_HttpClient_1connect(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jstring jarg2, jstring jarg3, jstring jarg4) {
+  jint jresult = 0 ;
+  Neubot::HttpClient *arg1 = (Neubot::HttpClient *) 0 ;
+  char *arg2 = (char *) 0 ;
+  char *arg3 = (char *) 0 ;
+  char *arg4 = (char *) 0 ;
+  int result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(Neubot::HttpClient **)&jarg1; 
+  arg2 = 0;
+  if (jarg2) {
+    arg2 = (char *)jenv->GetStringUTFChars(jarg2, 0);
+    if (!arg2) return 0;
+  }
+  arg3 = 0;
+  if (jarg3) {
+    arg3 = (char *)jenv->GetStringUTFChars(jarg3, 0);
+    if (!arg3) return 0;
+  }
+  arg4 = 0;
+  if (jarg4) {
+    arg4 = (char *)jenv->GetStringUTFChars(jarg4, 0);
+    if (!arg4) return 0;
+  }
+  result = (int)(arg1)->connect((char const *)arg2,(char const *)arg3,(char const *)arg4);
+  jresult = (jint)result; 
+  if (arg2) jenv->ReleaseStringUTFChars(jarg2, (const char *)arg2);
+  if (arg3) jenv->ReleaseStringUTFChars(jarg3, (const char *)arg3);
+  if (arg4) jenv->ReleaseStringUTFChars(jarg4, (const char *)arg4);
+  return jresult;
+}
+
+
+SWIGEXPORT jint JNICALL Java_org_neubot_swig_LibNeubotJNI_HttpClient_1write(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jstring jarg2, jlong jarg3) {
+  jint jresult = 0 ;
+  Neubot::HttpClient *arg1 = (Neubot::HttpClient *) 0 ;
+  char *arg2 = (char *) 0 ;
+  size_t arg3 ;
+  int result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(Neubot::HttpClient **)&jarg1; 
+  arg2 = 0;
+  if (jarg2) {
+    arg2 = (char *)jenv->GetStringUTFChars(jarg2, 0);
+    if (!arg2) return 0;
+  }
+  arg3 = (size_t)jarg3; 
+  result = (int)(arg1)->write((char const *)arg2,arg3);
+  jresult = (jint)result; 
+  if (arg2) jenv->ReleaseStringUTFChars(jarg2, (const char *)arg2);
+  return jresult;
+}
+
+
+SWIGEXPORT jint JNICALL Java_org_neubot_swig_LibNeubotJNI_HttpClient_1writes(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jstring jarg2) {
+  jint jresult = 0 ;
+  Neubot::HttpClient *arg1 = (Neubot::HttpClient *) 0 ;
+  char *arg2 = (char *) 0 ;
+  int result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(Neubot::HttpClient **)&jarg1; 
+  arg2 = 0;
+  if (jarg2) {
+    arg2 = (char *)jenv->GetStringUTFChars(jarg2, 0);
+    if (!arg2) return 0;
+  }
+  result = (int)(arg1)->writes((char const *)arg2);
+  jresult = (jint)result; 
+  if (arg2) jenv->ReleaseStringUTFChars(jarg2, (const char *)arg2);
+  return jresult;
+}
+
+
+SWIGEXPORT jint JNICALL Java_org_neubot_swig_LibNeubotJNI_HttpClient_1flush(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jint jresult = 0 ;
+  Neubot::HttpClient *arg1 = (Neubot::HttpClient *) 0 ;
+  int result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(Neubot::HttpClient **)&jarg1; 
+  result = (int)(arg1)->flush();
+  jresult = (jint)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jint JNICALL Java_org_neubot_swig_LibNeubotJNI_HttpClient_1code(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jint jresult = 0 ;
+  Neubot::HttpClient *arg1 = (Neubot::HttpClient *) 0 ;
+  int result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(Neubot::HttpClient **)&jarg1; 
+  result = (int)(arg1)->code();
+  jresult = (jint)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jstring JNICALL Java_org_neubot_swig_LibNeubotJNI_HttpClient_1reason(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jstring jresult = 0 ;
+  Neubot::HttpClient *arg1 = (Neubot::HttpClient *) 0 ;
+  char *result = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(Neubot::HttpClient **)&jarg1; 
+  result = (char *)(arg1)->reason();
+  if (result) jresult = jenv->NewStringUTF((const char *)result);
+  return jresult;
+}
+
+
+SWIGEXPORT jstring JNICALL Java_org_neubot_swig_LibNeubotJNI_HttpClient_1header(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jstring jarg2) {
+  jstring jresult = 0 ;
+  Neubot::HttpClient *arg1 = (Neubot::HttpClient *) 0 ;
+  char *arg2 = (char *) 0 ;
+  char *result = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(Neubot::HttpClient **)&jarg1; 
+  arg2 = 0;
+  if (jarg2) {
+    arg2 = (char *)jenv->GetStringUTFChars(jarg2, 0);
+    if (!arg2) return 0;
+  }
+  result = (char *)(arg1)->header((char const *)arg2);
+  if (result) jresult = jenv->NewStringUTF((const char *)result);
+  if (arg2) jenv->ReleaseStringUTFChars(jarg2, (const char *)arg2);
+  return jresult;
+}
+
+
+SWIGEXPORT jlong JNICALL Java_org_neubot_swig_LibNeubotJNI_HttpClient_1body_1length(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jlong jresult = 0 ;
+  Neubot::HttpClient *arg1 = (Neubot::HttpClient *) 0 ;
+  size_t result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(Neubot::HttpClient **)&jarg1; 
+  result = (arg1)->body_length();
+  jresult = (jlong)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jstring JNICALL Java_org_neubot_swig_LibNeubotJNI_HttpClient_1body_1string(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jstring jresult = 0 ;
+  Neubot::HttpClient *arg1 = (Neubot::HttpClient *) 0 ;
+  char *result = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(Neubot::HttpClient **)&jarg1; 
+  result = (char *)(arg1)->body_string();
+  if (result) jresult = jenv->NewStringUTF((const char *)result);
+  return jresult;
+}
+
+
+SWIGEXPORT void JNICALL Java_org_neubot_swig_LibNeubotJNI_delete_1HttpClient(JNIEnv *jenv, jclass jcls, jlong jarg1) {
+  Neubot::HttpClient *arg1 = (Neubot::HttpClient *) 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  arg1 = *(Neubot::HttpClient **)&jarg1; 
+  delete arg1;
+}
+
+
+SWIGEXPORT void JNICALL Java_org_neubot_swig_LibNeubotJNI_HttpClient_1director_1connect(JNIEnv *jenv, jclass jcls, jobject jself, jlong objarg, jboolean jswig_mem_own, jboolean jweak_global) {
+  Neubot::HttpClient *obj = *((Neubot::HttpClient **)&objarg);
+  (void)jcls;
+  SwigDirector_HttpClient *director = dynamic_cast<SwigDirector_HttpClient *>(obj);
+  if (director) {
+    director->swig_connect_director(jenv, jself, jenv->GetObjectClass(jself), (jswig_mem_own == JNI_TRUE), (jweak_global == JNI_TRUE));
+  }
+}
+
+
+SWIGEXPORT void JNICALL Java_org_neubot_swig_LibNeubotJNI_HttpClient_1change_1ownership(JNIEnv *jenv, jclass jcls, jobject jself, jlong objarg, jboolean jtake_or_release) {
+  Neubot::HttpClient *obj = *((Neubot::HttpClient **)&objarg);
+  SwigDirector_HttpClient *director = dynamic_cast<SwigDirector_HttpClient *>(obj);
+  (void)jcls;
+  if (director) {
+    director->swig_java_change_ownership(jenv, jself, jtake_or_release ? true : false);
+  }
 }
 
 
@@ -834,7 +1330,28 @@ SWIGEXPORT void JNICALL Java_org_neubot_swig_LibNeubotJNI_swig_1module_1init(JNI
   static struct {
     const char *method;
     const char *signature;
-  } methods[3] = {
+  } methods[10] = {
+    {
+      "SwigDirector_HttpClient_handle_begin", "(Lorg/neubot/swig/HttpClient;)V" 
+    },
+    {
+      "SwigDirector_HttpClient_handle_body", "(Lorg/neubot/swig/HttpClient;)V" 
+    },
+    {
+      "SwigDirector_HttpClient_handle_close", "(Lorg/neubot/swig/HttpClient;)V" 
+    },
+    {
+      "SwigDirector_HttpClient_handle_connect", "(Lorg/neubot/swig/HttpClient;)V" 
+    },
+    {
+      "SwigDirector_HttpClient_handle_end", "(Lorg/neubot/swig/HttpClient;)V" 
+    },
+    {
+      "SwigDirector_HttpClient_handle_flush", "(Lorg/neubot/swig/HttpClient;)V" 
+    },
+    {
+      "SwigDirector_HttpClient_handle_headers", "(Lorg/neubot/swig/HttpClient;)V" 
+    },
     {
       "SwigDirector_Pollable_handle_read", "(Lorg/neubot/swig/Pollable;)V" 
     },

@@ -91,6 +91,45 @@ class EchoServer(_object):
 EchoServer_swigregister = _libneubot_python.EchoServer_swigregister
 EchoServer_swigregister(EchoServer)
 
+class HttpClient(_object):
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, HttpClient, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, HttpClient, name)
+    __repr__ = _swig_repr
+    def handle_begin(self): return _libneubot_python.HttpClient_handle_begin(self)
+    def handle_body(self): return _libneubot_python.HttpClient_handle_body(self)
+    def handle_close(self): return _libneubot_python.HttpClient_handle_close(self)
+    def handle_connect(self): return _libneubot_python.HttpClient_handle_connect(self)
+    def handle_end(self): return _libneubot_python.HttpClient_handle_end(self)
+    def handle_flush(self): return _libneubot_python.HttpClient_handle_flush(self)
+    def handle_headers(self): return _libneubot_python.HttpClient_handle_headers(self)
+    def __init__(self, *args): 
+        if self.__class__ == HttpClient:
+            _self = None
+        else:
+            _self = self
+        this = _libneubot_python.new_HttpClient(_self, *args)
+        try: self.this.append(this)
+        except: self.this = this
+    def connect(self, *args): return _libneubot_python.HttpClient_connect(self, *args)
+    def write(self, *args): return _libneubot_python.HttpClient_write(self, *args)
+    def writes(self, *args): return _libneubot_python.HttpClient_writes(self, *args)
+    def flush(self): return _libneubot_python.HttpClient_flush(self)
+    def code(self): return _libneubot_python.HttpClient_code(self)
+    def reason(self): return _libneubot_python.HttpClient_reason(self)
+    def header(self, *args): return _libneubot_python.HttpClient_header(self, *args)
+    def body_length(self): return _libneubot_python.HttpClient_body_length(self)
+    def body_string(self): return _libneubot_python.HttpClient_body_string(self)
+    __swig_destroy__ = _libneubot_python.delete_HttpClient
+    __del__ = lambda self : None;
+    def __disown__(self):
+        self.this.disown()
+        _libneubot_python.disown_HttpClient(self)
+        return weakref_proxy(self)
+HttpClient_swigregister = _libneubot_python.HttpClient_swigregister
+HttpClient_swigregister(HttpClient)
+
 class Pollable(_object):
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, Pollable, name, value)

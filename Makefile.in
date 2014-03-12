@@ -1,7 +1,7 @@
 # libneubot/Makefile
 
 #
-# Copyright (c) 2013
+# Copyright (c) 2013-2014
 #     Nexa Center for Internet & Society, Politecnico di Torino (DAUIN)
 #     and Simone Basso <bassosimone@gmail.com>.
 #
@@ -41,13 +41,16 @@ HEADER = neubot.h
 LINKERNAME = libneubot.@SHARED_LIBRARY_EXT@
 SONAME = $(LINKERNAME).$(MAJOR)
 REALNAME = $(SONAME).$(MINOR)
-OBJECTS = echo.o log.o poller.o strtonum.o utils.o
+OBJECTS = echo.o httpclient.o http-parser/http_parser.o log.o poller.o \
+		strtonum.o utils.o
 PYMODULE = libneubot.py
 
 $(REALNAME): $(OBJECTS)
 	$(CC) $(LDFLAGS) $(OBJECTS) -o $(REALNAME) -levent -lm
 
 echo.o: echo.c
+httpclient.o: httpclient.c
+http-parser/http_parser.o: http-parser/http_parser.c
 log.o: log.c
 poller.o: poller.c
 strtonum.o: strtonum.c

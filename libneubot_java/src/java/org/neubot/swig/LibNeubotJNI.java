@@ -11,6 +11,26 @@ package org.neubot.swig;
 public class LibNeubotJNI {
   public final static native long new_EchoServer(long jarg1, Poller jarg1_, int jarg2, String jarg3, String jarg4);
   public final static native void delete_EchoServer(long jarg1);
+  public final static native void HttpClient_handle_begin(long jarg1, HttpClient jarg1_);
+  public final static native void HttpClient_handle_body(long jarg1, HttpClient jarg1_);
+  public final static native void HttpClient_handle_close(long jarg1, HttpClient jarg1_);
+  public final static native void HttpClient_handle_connect(long jarg1, HttpClient jarg1_);
+  public final static native void HttpClient_handle_end(long jarg1, HttpClient jarg1_);
+  public final static native void HttpClient_handle_flush(long jarg1, HttpClient jarg1_);
+  public final static native void HttpClient_handle_headers(long jarg1, HttpClient jarg1_);
+  public final static native long new_HttpClient(long jarg1, Poller jarg1_);
+  public final static native int HttpClient_connect(long jarg1, HttpClient jarg1_, String jarg2, String jarg3, String jarg4);
+  public final static native int HttpClient_write(long jarg1, HttpClient jarg1_, String jarg2, long jarg3);
+  public final static native int HttpClient_writes(long jarg1, HttpClient jarg1_, String jarg2);
+  public final static native int HttpClient_flush(long jarg1, HttpClient jarg1_);
+  public final static native int HttpClient_code(long jarg1, HttpClient jarg1_);
+  public final static native String HttpClient_reason(long jarg1, HttpClient jarg1_);
+  public final static native String HttpClient_header(long jarg1, HttpClient jarg1_, String jarg2);
+  public final static native long HttpClient_body_length(long jarg1, HttpClient jarg1_);
+  public final static native String HttpClient_body_string(long jarg1, HttpClient jarg1_);
+  public final static native void delete_HttpClient(long jarg1);
+  public final static native void HttpClient_director_connect(HttpClient obj, long cptr, boolean mem_own, boolean weak_global);
+  public final static native void HttpClient_change_ownership(HttpClient obj, long cptr, boolean take_or_release);
   public final static native void Pollable_handle_read(long jarg1, Pollable jarg1_);
   public final static native void Pollable_handle_write(long jarg1, Pollable jarg1_);
   public final static native void Pollable_handle_close(long jarg1, Pollable jarg1_);
@@ -32,6 +52,27 @@ public class LibNeubotJNI {
   public final static native void Poller_break_loop(long jarg1, Poller jarg1_);
   public final static native void delete_Poller(long jarg1);
 
+  public static void SwigDirector_HttpClient_handle_begin(HttpClient self) {
+    self.handle_begin();
+  }
+  public static void SwigDirector_HttpClient_handle_body(HttpClient self) {
+    self.handle_body();
+  }
+  public static void SwigDirector_HttpClient_handle_close(HttpClient self) {
+    self.handle_close();
+  }
+  public static void SwigDirector_HttpClient_handle_connect(HttpClient self) {
+    self.handle_connect();
+  }
+  public static void SwigDirector_HttpClient_handle_end(HttpClient self) {
+    self.handle_end();
+  }
+  public static void SwigDirector_HttpClient_handle_flush(HttpClient self) {
+    self.handle_flush();
+  }
+  public static void SwigDirector_HttpClient_handle_headers(HttpClient self) {
+    self.handle_headers();
+  }
   public static void SwigDirector_Pollable_handle_read(Pollable self) {
     self.handle_read();
   }
