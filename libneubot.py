@@ -523,6 +523,63 @@ LIBNEUBOT.NeubotProtocol_destruct.argtypes = (
 def NeubotProtocol_destruct(handle):
     LIBNEUBOT.NeubotProtocol_destruct(handle)
 
+#
+# NeubotStringVector API:
+#
+
+LIBNEUBOT.NeubotStringVector_construct.restype = ctypes.c_void_p
+LIBNEUBOT.NeubotStringVector_construct.argtypes = (
+    ctypes.c_void_p,
+    ctypes.c_size_t,
+)
+
+def NeubotStringVector_construct(poller, count):
+    ret = LIBNEUBOT.NeubotStringVector_construct(poller, count)
+    if not ret:
+        raise RuntimeError('LibNeubot error')
+    return ret
+
+LIBNEUBOT.NeubotStringVector_append.restype = ctypes.c_int
+LIBNEUBOT.NeubotStringVector_append.argtypes = (
+    ctypes.c_void_p,
+    ctypes.c_char_p,
+)
+
+def NeubotStringVector_append(handle, str):
+    ret = LIBNEUBOT.NeubotStringVector_append(handle, str)
+    if ret != 0:
+        raise RuntimeError('LibNeubot error')
+    return ret
+
+LIBNEUBOT.NeubotStringVector_get_poller.restype = ctypes.c_void_p
+LIBNEUBOT.NeubotStringVector_get_poller.argtypes = (
+    ctypes.c_void_p,
+)
+
+def NeubotStringVector_get_poller(handle):
+    ret = LIBNEUBOT.NeubotStringVector_get_poller(handle)
+    if not ret:
+        raise RuntimeError('LibNeubot error')
+    return ret
+
+LIBNEUBOT.NeubotStringVector_get_next.restype = ctypes.c_char_p
+LIBNEUBOT.NeubotStringVector_get_next.argtypes = (
+    ctypes.c_void_p,
+)
+
+def NeubotStringVector_get_next(handle):
+    ret = LIBNEUBOT.NeubotStringVector_get_next(handle)
+    if not ret:
+        raise RuntimeError('LibNeubot error')
+    return ret
+
+LIBNEUBOT.NeubotStringVector_destruct.argtypes = (
+    ctypes.c_void_p,
+)
+
+def NeubotStringVector_destruct(handle):
+    LIBNEUBOT.NeubotStringVector_destruct(handle)
+
 class NeubotHookClosure(object):
     def __init__(self):
         self.opaque = None
@@ -880,4 +937,41 @@ class Protocol(object):
         self._can_destroy = False
         LIBNEUBOT_OBJECTS.remove(self)
         LIBNEUBOT.NeubotProtocol_destruct(self._context)
+
+#
+# NeubotStringVector wrapper:
+#
+
+class StringVector(object):
+
+    def __init__(self, poller, count):
+        # We cannot destroy until the object is complete
+        self._can_destroy = False
+        self._context = LIBNEUBOT.NeubotStringVector_construct(
+          poller._context, count)
+        if not self._context:
+            raise RuntimeError('out of memory')
+        # From now on we can destroy this object
+        self._can_destroy = True
+        LIBNEUBOT_OBJECTS.add(self)
+
+    def append(self, str):
+        retval = LIBNEUBOT.NeubotStringVector_append(self._context, str)
+        if retval != 0:
+            raise RuntimeError('append failed')
+        return retval
+
+    def get_poller(self):
+        return LIBNEUBOT.NeubotStringVector_get_poller(self._context)
+
+    def get_next(self):
+        return LIBNEUBOT.NeubotStringVector_get_next(self._context)
+
+    def destruct(self):
+        if not self._can_destroy:
+            return
+        # Idempotent destructor for safety
+        self._can_destroy = False
+        LIBNEUBOT_OBJECTS.remove(self)
+        LIBNEUBOT.NeubotStringVector_destruct(self._context)
 

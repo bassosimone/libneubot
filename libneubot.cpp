@@ -37,6 +37,7 @@
 #include "neubot.h"
 #include "protocol.h"
 #include "pollable.hh"
+#include "stringvector.h"
 
 //
 // Pollable
@@ -423,4 +424,55 @@ NeubotConnection_close(NeubotConnection *self)
 		abort();
 
 	self->close();
+}
+
+//
+// StringVector
+//
+
+struct NeubotStringVector : public Neubot::StringVector {
+	// nothing
+};
+
+NeubotStringVector *
+NeubotStringVector_construct(NeubotPoller *poller, size_t count)
+{
+	return (static_cast<NeubotStringVector *>(
+	    NeubotStringVector::construct(poller, count)));
+}
+
+int
+NeubotStringVector_append(NeubotStringVector *self, const char *str)
+{
+	if (self == NULL)
+		abort();
+
+	return (self->append(str));
+}
+
+NeubotPoller *
+NeubotStringVector_get_poller(NeubotStringVector *self)
+{
+	if (self == NULL)
+		abort();
+
+	return (self->get_poller());
+}
+
+const char *
+NeubotStringVector_get_next(NeubotStringVector *self)
+{
+	if (self == NULL)
+		abort();
+
+	return (self->get_next());
+}
+
+void
+NeubotStringVector_destruct(NeubotStringVector *self)
+{
+	if (self == NULL)
+		abort();
+
+	delete (self);
 }
