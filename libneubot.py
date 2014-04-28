@@ -57,6 +57,21 @@ def NeubotConnection_connect(proto, family, address, port):
         raise RuntimeError('LibNeubot error')
     return ret
 
+LIBNEUBOT.NeubotConnection_connect_hostname.restype = ctypes.c_void_p
+LIBNEUBOT.NeubotConnection_connect_hostname.argtypes = (
+    ctypes.c_void_p,
+    ctypes.c_char_p,
+    ctypes.c_char_p,
+    ctypes.c_char_p,
+)
+
+def NeubotConnection_connect_hostname(proto, family, address, port):
+    ret = LIBNEUBOT.NeubotConnection_connect_hostname(proto, family, 
+      address, port)
+    if not ret:
+        raise RuntimeError('LibNeubot error')
+    return ret
+
 LIBNEUBOT.NeubotConnection_get_protocol.restype = ctypes.c_void_p
 LIBNEUBOT.NeubotConnection_get_protocol.argtypes = (
     ctypes.c_void_p,
@@ -608,6 +623,17 @@ class Connection(object):
         self._can_destroy = False
         self._context = LIBNEUBOT.NeubotConnection_connect(proto._context,
           family, address, port)
+        if not self._context:
+            raise RuntimeError('out of memory')
+        # From now on we can destroy this object
+        self._can_destroy = True
+        LIBNEUBOT_OBJECTS.add(self)
+
+    def __init__(self, proto, family, address, port):
+        # We cannot destroy until the object is complete
+        self._can_destroy = False
+        self._context = LIBNEUBOT.NeubotConnection_connect_hostname(
+          proto._context, family, address, port)
         if not self._context:
             raise RuntimeError('out of memory')
         # From now on we can destroy this object

@@ -309,6 +309,14 @@ NeubotConnection_connect(NeubotProtocol *proto, const char *family,
 	    NeubotConnection::connect(proto, family, address, port)));
 }
 
+NeubotConnection *
+NeubotConnection_connect_hostname(NeubotProtocol *proto, const char *family,
+    const char *address, const char *port)
+{
+	return (static_cast<NeubotConnection *>(
+	    NeubotConnection::connect_hostname(proto, family, address, port)));
+}
+
 NeubotProtocol *
 NeubotConnection_get_protocol(NeubotConnection *self)
 {

@@ -59,6 +59,7 @@ struct bufferevent;
 struct evbuffer;
 
 namespace Neubot {
+	class StringVector;
 	struct Protocol;
 
 	class Connection {
@@ -69,6 +70,10 @@ namespace Neubot {
 		unsigned int closing;
 		unsigned int connecting;
 		unsigned int reading;
+		char *address;
+		char *port;
+		StringVector *addrlist;
+		const char *_family;
 
 		Connection(void);
 
@@ -80,10 +85,19 @@ namespace Neubot {
 		static void handle_write(bufferevent *, void *);
 		static void handle_event(bufferevent *, short, void *);
 
+		// Functions used by connect_hostname()
+		void connect_next(void);
+		static void handle_resolve(int, char, int, int,
+		    void *, void *);
+		static void resolve(void *);
+
 	    public:
 		static Connection *attach(Protocol *, long long);
 
 		static Connection *connect(Protocol *, const char *,
+		    const char *, const char *);
+
+		static Connection *connect_hostname(Protocol *, const char *,
 		    const char *, const char *);
 
 		Protocol *get_protocol(void);
