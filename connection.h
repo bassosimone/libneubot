@@ -73,7 +73,10 @@ namespace Neubot {
 		char *address;
 		char *port;
 		StringVector *addrlist;
-		const char *_family;
+		char *family;
+		StringVector *pflist;
+		unsigned int must_resolve_ipv4;
+		unsigned int must_resolve_ipv6;
 
 		Connection(void);
 
