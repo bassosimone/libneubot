@@ -33,6 +33,11 @@
 #include <event2/dns.h>
 #include <event2/event.h>
 
+#ifdef LIBNEUBOT_SSL
+#include <openssl/ssl.h>
+#include <event2/bufferevent_ssl.h>
+#endif
+
 #include "ll2sock.h"
 #include "log.h"
 #include "neubot.h"
@@ -59,6 +64,7 @@ Neubot::Connection::Connection(void)
 	this->pflist = NULL;
 	this->must_resolve_ipv4 = 0;
 	this->must_resolve_ipv6 = 0;
+	this->ssl_pending = 0;
 }
 
 Neubot::Connection::~Connection(void)
@@ -92,6 +98,7 @@ Neubot::Connection::~Connection(void)
 
 	// must_resolve_ipv4: nothing to be done
 	// must_resolve_ipv6: nothing to be done
+	// ssl_pending: nothing to be done
 }
 
 void
@@ -131,18 +138,28 @@ Neubot::Connection::handle_event(bufferevent *bev, short what, void *opaque)
 
 	(void) bev;  // Suppress warning about unused variable
 
-	if (self->connecting && self->closing) {
+	if ((self->connecting || self->ssl_pending) && self->closing) {
 		delete (self);
 		return;
 	}
 
 	if (what & BEV_EVENT_CONNECTED) {
-		self->connecting = 0;
 		int result = bufferevent_enable(self->bev, EV_READ);
 		if (result != 0) {
+			// Make sure that we can close this connection
+			self->ssl_pending = 0;
+			self->connecting = 0;
 			self->protocol->on_error();
 			return;
 		}
+#if LIBNEUBOT_SSL
+		if (self->ssl_pending) {
+			self->ssl_pending = 0;
+			self->protocol->on_ssl();
+			return;
+		}
+#endif
+		self->connecting = 0;
 		self->protocol->on_connect();
 		return;
 	}
@@ -240,6 +257,7 @@ Neubot::Connection::attach(Neubot::Protocol *proto, long long filenum)
 
 	// must_resolve_ipv4: nothing to be done
 	// must_resolve_ipv6: nothing to be done
+	// ssl_pending: nothing to be done
 
 	bufferevent_setcb(self->bev, self->handle_read, self->handle_write,
 	    self->handle_event, self);
@@ -343,6 +361,7 @@ Neubot::Connection::connect(Neubot::Protocol *proto, const char *family,
 
 	// must_resolve_ipv4: nothing to be done
 	// must_resolve_ipv6: nothing to be done
+	// ssl_pending: nothing to be done
 
 	bufferevent_setcb(self->bev, self->handle_read, self->handle_write,
 	    self->handle_event, self);
@@ -661,6 +680,7 @@ Neubot::Connection::connect_hostname(Neubot::Protocol *proto,
 
 	// must_resolve_ipv4: set later by self->resolve()
 	// must_resolve_ipv6: set later by self->resolve()
+	// ssl_pending: nothing to be done
 
 	bufferevent_setcb(self->bev, self->handle_read, self->handle_write,
 	    self->handle_event, self);
@@ -699,9 +719,52 @@ Neubot::Connection::clear_timeout(void)
 int
 Neubot::Connection::start_tls(unsigned server_side)
 {
-	(void) server_side;
+#ifdef LIBNEUBOT_SSL
+	neubot_info("connection::start_tls - enter");
 
-	return (-1);  // TODO: implement
+	if (server_side) {
+		return (-1);  // TODO: implement
+	}
+	if (bufferevent_get_underlying(this->bev) != NULL) {
+		neubot_warn("connection::start_tls - SSL already started");
+		return (-1);
+	}
+
+	event_base *evbase = bufferevent_get_base(this->bev);
+	if (evbase == NULL)
+		abort();
+
+	NeubotPoller *poller = this->protocol->get_poller();
+	if (poller == NULL)
+		abort();
+
+	SSL_CTX *context = NeubotPoller_get_ssl_client(poller);
+	if (context == NULL)
+		abort();
+
+	SSL *ssl = SSL_new(context);
+	if (ssl == NULL)
+		return (-1);
+
+	bufferevent *sslbev = bufferevent_openssl_filter_new(evbase, this->bev,
+	    ssl, BUFFEREVENT_SSL_CONNECTING, BEV_OPT_CLOSE_ON_FREE);
+	if (sslbev == NULL) {
+		SSL_free(ssl);
+		return (-1);
+	}
+	bufferevent_setcb(sslbev, this->handle_read, this->handle_write,
+	    this->handle_event, this);
+	this->ssl_pending = 1;
+
+	// Not a leak: we told sslbev to close its underlying bev
+	this->bev = sslbev;
+
+	neubot_info("connection::start_tls - ok");
+	return (0);
+#else
+	neubot_warn("connection::start_tls - not implemented");
+	return (-1);
+#endif
 }
 
 int
@@ -805,7 +868,7 @@ void
 Neubot::Connection::close(void)
 {
 	this->closing = 1;
-	if (this->reading != 0 || this->connecting != 0)
+	if (this->reading || this->connecting || this->ssl_pending)
 		return;
 	delete this;
 }

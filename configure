@@ -39,22 +39,21 @@ fi
 
 SYSTEM=$(uname)
 
+LIBS="-levent_core -levent_extra -levent_openssl -lssl"
+
 if [ "$SYSTEM" = "Darwin" ]; then
-    CFLAGS="-I/opt/local/include"
+    CFLAGS="-I/opt/local/include -DLIBNEUBOT_SSL"
     LDFLAGS="-L/opt/local/lib"
-    LIBS="-levent"
     SHARED_LIBRARY_EXT="dylib"
 
 elif [ "$SYSTEM" = "OpenBSD" ]; then
-    CFLAGS="-I/usr/local/include"
+    CFLAGS="-I/usr/local/include -DLIBNEUBOT_SSL"
     LDFLAGS="-L/usr/local/lib"
-    LIBS="-levent_core -levent_extra"
     SHARED_LIBRARY_EXT="so"
 
 else
-    CFLAGS=""
+    CFLAGS="-DLIBNEUBOT_SSL"
     LDFLAGS=""
-    LIBS="-levent"
     SHARED_LIBRARY_EXT="so"
 fi
 

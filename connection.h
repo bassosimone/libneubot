@@ -77,6 +77,7 @@ namespace Neubot {
 		StringVector *pflist;
 		unsigned int must_resolve_ipv4;
 		unsigned int must_resolve_ipv6;
+		unsigned int ssl_pending;
 
 		Connection(void);
 

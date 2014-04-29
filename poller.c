@@ -41,6 +41,10 @@
 #include <event2/dns.h>
 #include <event2/dns_compat.h>
 
+#ifdef LIBNEUBOT_SSL
+#include <openssl/ssl.h>
+#endif
+
 #include "neubot.h"
 
 #include "ll2sock.h"
@@ -54,6 +58,9 @@ struct NeubotPoller {
 #endif
 	struct event_base *base;
 	struct evdns_base *dnsbase;
+#ifdef LIBNEUBOT_SSL
+	struct ssl_ctx_st *ssl_client;
+#endif
 };
 
 struct NeubotEvent {
@@ -215,6 +222,17 @@ NeubotPoller_construct(void)
 		goto failure;
 #endif
 
+#ifdef LIBNEUBOT_SSL
+	SSL_load_error_strings();
+	(void) SSL_library_init();
+
+	self->ssl_client = SSL_CTX_new(TLSv1_method());
+	if (self->ssl_client == NULL)
+		goto failure;
+
+	/* TODO: initialize the context to verify certificates, etc. */
+#endif
+
 	return (self);
 
       failure:
@@ -239,10 +257,15 @@ NeubotPoller_evdns_base_(struct NeubotPoller *self)
 	return (self->dnsbase);
 }
 
-/*
- * This is implemented like in Neubot; however, it is a bit dangerous
- * and/or annoying that one cannot destroy pending callbacks.
- */
+#ifdef LIBNEUBOT_SSL
+/* Method that we use only internally: */
+struct ssl_ctx_st *
+NeubotPoller_get_ssl_client(struct NeubotPoller *self)
+{
+	return (self->ssl_client);
+}
+#endif
+
 int
 NeubotPoller_sched(struct NeubotPoller *self, double delta,
     neubot_hook_vo callback, void *opaque)
