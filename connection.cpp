@@ -453,13 +453,13 @@ Neubot::Connection::handle_resolve(int result, char type, int count,
 	switch (type) {
 	case DNS_IPv4_A:
 		neubot_info("handle_resolve - IPv4");
-		family = AF_INET;
+		family = PF_INET;
 		_family = "PF_INET";
 		size = 4;
 		break;
 	case DNS_IPv6_AAAA:
 		neubot_info("handle_resolve - IPv6");
-		family = AF_INET6;
+		family = PF_INET6;
 		_family = "PF_INET6";
 		size = 16;
 		break;
@@ -527,12 +527,48 @@ void
 Neubot::Connection::resolve(void *opaque)
 {
 	Neubot::Connection *self = (Neubot::Connection *) opaque;
+	struct sockaddr_storage storage;
+	int result;
 
 	if (!self->connecting)
 		abort();
 
 	if (self->closing) {
 		delete (self);
+		return;
+	}
+
+	// If self->address is a valid IPv4 address, connect directly
+	memset(&storage, 0, sizeof (storage));
+	result = inet_pton(PF_INET, self->address, &storage);
+	if (result == 1) {
+		neubot_info("resolve - address %s", self->address);
+		neubot_info("resolve - family PF_INET");
+		if (self->addrlist->append(self->address) != 0 ||
+		    self->pflist->append("PF_INET") != 0) {
+			neubot_warn("resolve - cannot append");
+			self->connecting = 0;
+			self->protocol->on_error();
+			return;
+		}
+		self->connect_next();
+		return;
+	}
+
+	// If self->address is a valid IPv6 address, connect directly
+	memset(&storage, 0, sizeof (storage));
+	result = inet_pton(PF_INET6, self->address, &storage);
+	if (result == 1) {
+		neubot_info("resolve - address %s", self->address);
+		neubot_info("resolve - family PF_INET6");
+		if (self->addrlist->append(self->address) != 0 ||
+		    self->pflist->append("PF_INET6") != 0) {
+			neubot_warn("resolve - cannot append");
+			self->connecting = 0;
+			self->protocol->on_error();
+			return;
+		}
+		self->connect_next();
 		return;
 	}
 
