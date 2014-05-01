@@ -219,6 +219,28 @@ def NeubotConnection_write_from_(handle, evsource):
         raise RuntimeError('LibNeubot error')
     return ret
 
+LIBNEUBOT.NeubotConnection_enable_read.restype = ctypes.c_int
+LIBNEUBOT.NeubotConnection_enable_read.argtypes = (
+    ctypes.c_void_p,
+)
+
+def NeubotConnection_enable_read(handle):
+    ret = LIBNEUBOT.NeubotConnection_enable_read(handle)
+    if ret != 0:
+        raise RuntimeError('LibNeubot error')
+    return ret
+
+LIBNEUBOT.NeubotConnection_disable_read.restype = ctypes.c_int
+LIBNEUBOT.NeubotConnection_disable_read.argtypes = (
+    ctypes.c_void_p,
+)
+
+def NeubotConnection_disable_read(handle):
+    ret = LIBNEUBOT.NeubotConnection_disable_read(handle)
+    if ret != 0:
+        raise RuntimeError('LibNeubot error')
+    return ret
+
 LIBNEUBOT.NeubotConnection_close.argtypes = (
     ctypes.c_void_p,
 )
@@ -710,6 +732,18 @@ class Connection(object):
           evsource._context)
         if retval != 0:
             raise RuntimeError('write_from_ failed')
+        return retval
+
+    def enable_read(self):
+        retval = LIBNEUBOT.NeubotConnection_enable_read(self._context)
+        if retval != 0:
+            raise RuntimeError('enable_read failed')
+        return retval
+
+    def disable_read(self):
+        retval = LIBNEUBOT.NeubotConnection_disable_read(self._context)
+        if retval != 0:
+            raise RuntimeError('disable_read failed')
         return retval
 
     def close(self):

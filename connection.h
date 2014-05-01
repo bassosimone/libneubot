@@ -128,6 +128,9 @@ namespace Neubot {
 		int write_from_(evbuffer *);
 #endif
 
+		int enable_read(void);
+		int disable_read(void);
+
 		void close(void);
 	};
 }
