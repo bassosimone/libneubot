@@ -106,6 +106,8 @@ int NeubotConnection_write(struct NeubotConnection *, const char *, size_t);
 
 int NeubotConnection_puts(struct NeubotConnection *, const char *);
 
+long long NeubotConnection_steal_fileno_(struct NeubotConnection *);
+
 int NeubotConnection_read_into_(struct NeubotConnection *, struct evbuffer *);
 
 int NeubotConnection_write_from_(struct NeubotConnection *, struct evbuffer *);

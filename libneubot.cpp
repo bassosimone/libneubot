@@ -407,6 +407,15 @@ NeubotConnection_puts(NeubotConnection *self, const char *str)
 	return (self->puts(str));
 }
 
+long long
+NeubotConnection_steal_fileno_(struct NeubotConnection *self)
+{
+	if (self == NULL)
+		abort();
+
+	return (self->steal_fileno_());
+}
+
 int
 NeubotConnection_read_into_(NeubotConnection *self, evbuffer *dest)
 {

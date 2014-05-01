@@ -846,6 +846,14 @@ Neubot::Connection::puts(const char *str)
 	return (this->write(str, strlen(str)));
 }
 
+long long
+Neubot::Connection::steal_fileno_(void)
+{
+	long long filenum = this->filedesc;
+	this->filedesc = -1;
+	return (filenum);
+}
+
 int
 Neubot::Connection::read_into_(evbuffer *destbuf)
 {

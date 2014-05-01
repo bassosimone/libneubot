@@ -60,6 +60,7 @@
             ["ioresult_t", "discardn", ["size_t", "count"]],
             ["status_t", "write", ["cstring", "base"], ["size_t", "count"]],
             ["status_t", "puts", ["cstring", "base"]],
+            ["long long", "steal_fileno_"],
             ["status_t", "read_into_", ["evbuffer_p", "evdest"]],
             ["status_t", "write_from_", ["evbuffer_p", "evsource"]],
             ["__destruct__", "close"]

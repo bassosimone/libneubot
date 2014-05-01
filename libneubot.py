@@ -186,6 +186,15 @@ def NeubotConnection_puts(handle, base):
         raise RuntimeError('LibNeubot error')
     return ret
 
+LIBNEUBOT.NeubotConnection_steal_fileno_.restype = ctypes.c_longlong
+LIBNEUBOT.NeubotConnection_steal_fileno_.argtypes = (
+    ctypes.c_void_p,
+)
+
+def NeubotConnection_steal_fileno_(handle):
+    ret = LIBNEUBOT.NeubotConnection_steal_fileno_(handle)
+    return ret
+
 LIBNEUBOT.NeubotConnection_read_into_.restype = ctypes.c_int
 LIBNEUBOT.NeubotConnection_read_into_.argtypes = (
     ctypes.c_void_p,
@@ -685,6 +694,9 @@ class Connection(object):
         if retval != 0:
             raise RuntimeError('puts failed')
         return retval
+
+    def steal_fileno_(self):
+        return LIBNEUBOT.NeubotConnection_steal_fileno_(self._context)
 
     def read_into_(self, evdest):
         retval = LIBNEUBOT.NeubotConnection_read_into_(self._context,

@@ -119,6 +119,9 @@ namespace Neubot {
 		int write(const char *, size_t);
 		int puts(const char *);
 
+		// Required to implement net.stream.Connector
+		long long steal_fileno_(void);
+
 		// Internally-used zero-copy read and write
 #ifndef SWIG
 		int read_into_(evbuffer *);
