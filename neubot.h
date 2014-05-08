@@ -66,8 +66,8 @@ struct NeubotEchoServer *NeubotEchoServer_construct(struct NeubotPoller *,
 
 /* NeubotProtocol API: */
 
-struct NeubotProtocol *NeubotProtocol_construct(struct NeubotPoller *, 
-    neubot_slot_vo, neubot_slot_vo, neubot_slot_vo, neubot_slot_vo, 
+struct NeubotProtocol *NeubotProtocol_construct(struct NeubotPoller *,
+    neubot_slot_vo, neubot_slot_vo, neubot_slot_vo, neubot_slot_vo,
     neubot_slot_vo, neubot_slot_vo, void *);
 
 struct NeubotPoller *NeubotProtocol_get_poller(struct NeubotProtocol *);
@@ -76,10 +76,10 @@ void NeubotProtocol_destruct(struct NeubotProtocol *);
 
 /* NeubotConnection API: */
 
-struct NeubotConnection *NeubotConnection_attach(struct NeubotProtocol *, 
+struct NeubotConnection *NeubotConnection_attach(struct NeubotProtocol *,
     long long);
 
-struct NeubotConnection *NeubotConnection_connect(struct NeubotProtocol *, 
+struct NeubotConnection *NeubotConnection_connect(struct NeubotProtocol *,
     const char *, const char *, const char *);
 
 struct NeubotConnection *NeubotConnection_connect_hostname(
