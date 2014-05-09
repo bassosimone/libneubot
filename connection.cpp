@@ -48,7 +48,7 @@
 
 #include "connection.h"
 
-Neubot::Connection::Connection(void)
+NeubotConnection::NeubotConnection(void)
 {
 	this->filedesc = NEUBOT_SOCKET_INVALID;
 	this->bev = NULL;
@@ -67,7 +67,7 @@ Neubot::Connection::Connection(void)
 	this->ssl_pending = 0;
 }
 
-Neubot::Connection::~Connection(void)
+NeubotConnection::~NeubotConnection(void)
 {
 	if (this->filedesc != NEUBOT_SOCKET_INVALID)
 		(void) evutil_closesocket((evutil_socket_t) this->filedesc);
@@ -102,9 +102,9 @@ Neubot::Connection::~Connection(void)
 }
 
 void
-Neubot::Connection::handle_read(bufferevent *bev, void *opaque)
+NeubotConnection::handle_read(bufferevent *bev, void *opaque)
 {
-	Connection *self = (Connection *) opaque;
+	NeubotConnection *self = (NeubotConnection *) opaque;
 	int result;
 
 	(void) bev;  // Suppress warning about unused variable
@@ -124,17 +124,17 @@ Neubot::Connection::handle_read(bufferevent *bev, void *opaque)
 }
 
 void
-Neubot::Connection::handle_write(bufferevent *bev, void *opaque)
+NeubotConnection::handle_write(bufferevent *bev, void *opaque)
 {
-	Connection *self = (Connection *) opaque;
+	NeubotConnection *self = (NeubotConnection *) opaque;
 	(void) bev;  // Suppress warning about unused variable
 	self->protocol->on_flush();
 }
 
 void
-Neubot::Connection::handle_event(bufferevent *bev, short what, void *opaque)
+NeubotConnection::handle_event(bufferevent *bev, short what, void *opaque)
 {
-	Connection *self = (Connection *) opaque;
+	NeubotConnection *self = (NeubotConnection *) opaque;
 
 	(void) bev;  // Suppress warning about unused variable
 
@@ -172,12 +172,12 @@ Neubot::Connection::handle_event(bufferevent *bev, short what, void *opaque)
 	self->protocol->on_error();
 }
 
-Neubot::Connection *
-Neubot::Connection::attach(Neubot::Protocol *proto, long long filenum)
+NeubotConnection *
+NeubotConnection::attach(NeubotProtocol *proto, long long filenum)
 {
 	event_base *evbase;
 	NeubotPoller *poller;
-	Neubot::Connection *self;
+	NeubotConnection *self;
 	int result;
 
 	if (proto == NULL)
@@ -192,7 +192,7 @@ Neubot::Connection::attach(Neubot::Protocol *proto, long long filenum)
 	if (!neubot_socket_valid(filenum))
 		return (NULL);
 
-	self = new (std::nothrow) Neubot::Connection();
+	self = new (std::nothrow) NeubotConnection();
 	if (self == NULL)
 		return (NULL);
 
@@ -229,7 +229,7 @@ Neubot::Connection::attach(Neubot::Protocol *proto, long long filenum)
 		return (NULL);
 	}
 
-	self->addrlist = Neubot::StringVector::construct(poller, 16);
+	self->addrlist = new (std::nothrow) NeubotStringVector(poller, 16);
 	if (self->addrlist == NULL) {
 		delete self;
 		return (NULL);
@@ -241,7 +241,7 @@ Neubot::Connection::attach(Neubot::Protocol *proto, long long filenum)
 		return (NULL);
 	}
 
-	self->pflist = Neubot::StringVector::construct(poller, 16);
+	self->pflist = new (std::nothrow) NeubotStringVector(poller, 16);
 	if (self->pflist == NULL) {
 		delete self;
 		return (NULL);
@@ -259,14 +259,14 @@ Neubot::Connection::attach(Neubot::Protocol *proto, long long filenum)
 	return (self);
 }
 
-Neubot::Connection *
-Neubot::Connection::connect(Neubot::Protocol *proto, const char *family,
+NeubotConnection *
+NeubotConnection::connect(NeubotProtocol *proto, const char *family,
     const char *address, const char *port)
 {
 	event_base *evbase;
 	NeubotPoller *poller;
 	int result;
-	Neubot::Connection *self;
+	NeubotConnection *self;
 	struct sockaddr_storage storage;
 	socklen_t total;
 
@@ -283,7 +283,7 @@ Neubot::Connection::connect(Neubot::Protocol *proto, const char *family,
 	if (result != 0)
 		return (NULL);
 
-	self = new (std::nothrow) Neubot::Connection();
+	self = new (std::nothrow) NeubotConnection();
 	if (self == NULL)
 		return (NULL);
 
@@ -327,7 +327,7 @@ Neubot::Connection::connect(Neubot::Protocol *proto, const char *family,
 		return (NULL);
 	}
 
-	self->addrlist = Neubot::StringVector::construct(poller, 16);
+	self->addrlist = new (std::nothrow) NeubotStringVector(poller, 16);
 	if (self->addrlist == NULL) {
 		delete self;
 		return (NULL);
@@ -339,7 +339,7 @@ Neubot::Connection::connect(Neubot::Protocol *proto, const char *family,
 		return (NULL);
 	}
 
-	self->pflist = Neubot::StringVector::construct(poller, 16);
+	self->pflist = new (std::nothrow) NeubotStringVector(poller, 16);
 	if (self->pflist == NULL) {
 		delete self;
 		return (NULL);
@@ -363,7 +363,7 @@ Neubot::Connection::connect(Neubot::Protocol *proto, const char *family,
 }
 
 void
-Neubot::Connection::connect_next(void)
+NeubotConnection::connect_next(void)
 {
 	const char *address;
 	int error;
@@ -426,10 +426,10 @@ Neubot::Connection::connect_next(void)
 }
 
 void
-Neubot::Connection::handle_resolve(int result, char type, int count,
+NeubotConnection::handle_resolve(int result, char type, int count,
     int ttl, void *addresses, void *opaque)
 {
-	Neubot::Connection *self = (Neubot::Connection *) opaque;
+	NeubotConnection *self = (NeubotConnection *) opaque;
 	const char *_family;
 	const char *p;
 	int error, family, size;
@@ -524,9 +524,9 @@ Neubot::Connection::handle_resolve(int result, char type, int count,
 }
 
 void
-Neubot::Connection::resolve(void *opaque)
+NeubotConnection::resolve(void *opaque)
 {
-	Neubot::Connection *self = (Neubot::Connection *) opaque;
+	NeubotConnection *self = (NeubotConnection *) opaque;
 	struct sockaddr_storage storage;
 	int result;
 
@@ -620,14 +620,14 @@ Neubot::Connection::resolve(void *opaque)
 		self->must_resolve_ipv4 = 1;
 }
 
-Neubot::Connection *
-Neubot::Connection::connect_hostname(Neubot::Protocol *proto,
+NeubotConnection *
+NeubotConnection::connect_hostname(NeubotProtocol *proto,
     const char *family, const char *address, const char *port)
 {
 	event_base *evbase;
 	NeubotPoller *poller;
 	int result;
-	Neubot::Connection *self;
+	NeubotConnection *self;
 
 	if (proto == NULL || family == NULL || address == NULL || port == NULL)
 		abort();
@@ -638,7 +638,7 @@ Neubot::Connection::connect_hostname(Neubot::Protocol *proto,
 	if (evbase == NULL)
 		abort();
 
-	self = new (std::nothrow) Neubot::Connection();
+	self = new (std::nothrow) NeubotConnection();
 	if (self == NULL)
 		return (NULL);
 
@@ -678,7 +678,7 @@ Neubot::Connection::connect_hostname(Neubot::Protocol *proto,
 		return (NULL);
 	}
 
-	self->addrlist = Neubot::StringVector::construct(poller, 16);
+	self->addrlist = new (std::nothrow) NeubotStringVector(poller, 16);
 	if (self->addrlist == NULL) {
 		delete self;
 		return (NULL);
@@ -690,7 +690,7 @@ Neubot::Connection::connect_hostname(Neubot::Protocol *proto,
 		return (NULL);
 	}
 
-	self->pflist = Neubot::StringVector::construct(poller, 16);
+	self->pflist = new (std::nothrow) NeubotStringVector(poller, 16);
 	if (self->pflist == NULL) {
 		delete self;
 		return (NULL);
@@ -712,14 +712,14 @@ Neubot::Connection::connect_hostname(Neubot::Protocol *proto,
 	return (self);
 }
 
-Neubot::Protocol *
-Neubot::Connection::get_protocol(void)
+NeubotProtocol *
+NeubotConnection::get_protocol(void)
 {
 	return (this->protocol);
 }
 
 int
-Neubot::Connection::set_timeout(double timeout)
+NeubotConnection::set_timeout(double timeout)
 {
 	struct timeval tv, *tvp;
 	tvp = neubot_timeval_init(&tv, timeout);
@@ -727,13 +727,13 @@ Neubot::Connection::set_timeout(double timeout)
 }
 
 int
-Neubot::Connection::clear_timeout(void)
+NeubotConnection::clear_timeout(void)
 {
 	return (this->set_timeout(-1));
 }
 
 int
-Neubot::Connection::start_tls(unsigned server_side)
+NeubotConnection::start_tls(unsigned server_side)
 {
 #ifdef LIBNEUBOT_SSL
 	neubot_info("connection::start_tls - enter");
@@ -784,7 +784,7 @@ Neubot::Connection::start_tls(unsigned server_side)
 }
 
 int
-Neubot::Connection::read(char *base, size_t count)
+NeubotConnection::read(char *base, size_t count)
 {
 	if (base == NULL || count == 0 || count > INT_MAX)
 		return (-1);
@@ -793,7 +793,7 @@ Neubot::Connection::read(char *base, size_t count)
 }
 
 int
-Neubot::Connection::readline(char *base, size_t count)
+NeubotConnection::readline(char *base, size_t count)
 {
 	size_t eol_length = 0;
 	evbuffer_ptr result = evbuffer_search_eol(this->readbuf,
@@ -823,7 +823,7 @@ Neubot::Connection::readline(char *base, size_t count)
 }
 
 int
-Neubot::Connection::readn(char *base, size_t count)
+NeubotConnection::readn(char *base, size_t count)
 {
 	if (base == NULL || count == 0 || count > INT_MAX)
 		return (-1);
@@ -834,7 +834,7 @@ Neubot::Connection::readn(char *base, size_t count)
 }
 
 int
-Neubot::Connection::discardn(size_t count)
+NeubotConnection::discardn(size_t count)
 {
 	if (count == 0 || count > INT_MAX)
 		return (-1);
@@ -845,7 +845,7 @@ Neubot::Connection::discardn(size_t count)
 }
 
 int
-Neubot::Connection::write(const char *base, size_t count)
+NeubotConnection::write(const char *base, size_t count)
 {
 	if (base == NULL || count == 0)
 		return (-1);
@@ -854,7 +854,7 @@ Neubot::Connection::write(const char *base, size_t count)
 }
 
 int
-Neubot::Connection::puts(const char *str)
+NeubotConnection::puts(const char *str)
 {
 	if (str == NULL)
 		return (-1);
@@ -863,7 +863,7 @@ Neubot::Connection::puts(const char *str)
 }
 
 long long
-Neubot::Connection::steal_fileno_(void)
+NeubotConnection::steal_fileno_(void)
 {
 	long long filenum = this->filedesc;
 	this->filedesc = -1;
@@ -871,7 +871,7 @@ Neubot::Connection::steal_fileno_(void)
 }
 
 int
-Neubot::Connection::read_into_(evbuffer *destbuf)
+NeubotConnection::read_into_(evbuffer *destbuf)
 {
 	if (destbuf == NULL)
 		return (-1);
@@ -880,7 +880,7 @@ Neubot::Connection::read_into_(evbuffer *destbuf)
 }
 
 int
-Neubot::Connection::write_from_(evbuffer *sourcebuf)
+NeubotConnection::write_from_(evbuffer *sourcebuf)
 {
 	if (sourcebuf == NULL)
 		return (-1);
@@ -889,19 +889,19 @@ Neubot::Connection::write_from_(evbuffer *sourcebuf)
 }
 
 int
-Neubot::Connection::enable_read(void)
+NeubotConnection::enable_read(void)
 {
 	return (bufferevent_enable(this->bev, EV_READ));
 }
 
 int
-Neubot::Connection::disable_read(void)
+NeubotConnection::disable_read(void)
 {
 	return (bufferevent_disable(this->bev, EV_READ));
 }
 
 void
-Neubot::Connection::close(void)
+NeubotConnection::close(void)
 {
 	this->closing = 1;
 	if (this->reading || this->connecting || this->ssl_pending)

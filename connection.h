@@ -58,82 +58,81 @@
 struct bufferevent;
 struct evbuffer;
 
-namespace Neubot {
-	class StringVector;
-	struct Protocol;
+struct NeubotStringVector;
+struct NeubotProtocol;
 
-	class Connection {
-		long long filedesc;
-		bufferevent *bev;
-		Protocol *protocol;
-		evbuffer *readbuf;
-		unsigned int closing;
-		unsigned int connecting;
-		unsigned int reading;
-		char *address;
-		char *port;
-		StringVector *addrlist;
-		char *family;
-		StringVector *pflist;
-		unsigned int must_resolve_ipv4;
-		unsigned int must_resolve_ipv6;
-		unsigned int ssl_pending;
+struct NeubotConnection {
+    private:
+	long long filedesc;
+	bufferevent *bev;
+	NeubotProtocol *protocol;
+	evbuffer *readbuf;
+	unsigned int closing;
+	unsigned int connecting;
+	unsigned int reading;
+	char *address;
+	char *port;
+	NeubotStringVector *addrlist;
+	char *family;
+	NeubotStringVector *pflist;
+	unsigned int must_resolve_ipv4;
+	unsigned int must_resolve_ipv6;
+	unsigned int ssl_pending;
 
-		Connection(void);
+	NeubotConnection(void);
 
-		// Private destructor because destruction may be delayed
-		~Connection(void);
+	// Private destructor because destruction may be delayed
+	~NeubotConnection(void);
 
-		// Libevent callbacks
-		static void handle_read(bufferevent *, void *);
-		static void handle_write(bufferevent *, void *);
-		static void handle_event(bufferevent *, short, void *);
+	// Libevent callbacks
+	static void handle_read(bufferevent *, void *);
+	static void handle_write(bufferevent *, void *);
+	static void handle_event(bufferevent *, short, void *);
 
-		// Functions used by connect_hostname()
-		void connect_next(void);
-		static void handle_resolve(int, char, int, int,
-		    void *, void *);
-		static void resolve(void *);
+	// Functions used by connect_hostname()
+	void connect_next(void);
+	static void handle_resolve(int, char, int, int,
+	    void *, void *);
+	static void resolve(void *);
 
-	    public:
-		static Connection *attach(Protocol *, long long);
+    public:
+	static NeubotConnection *attach(NeubotProtocol *, long long);
 
-		static Connection *connect(Protocol *, const char *,
-		    const char *, const char *);
+	static NeubotConnection *connect(NeubotProtocol *, const char *,
+	    const char *, const char *);
 
-		static Connection *connect_hostname(Protocol *, const char *,
-		    const char *, const char *);
+	static NeubotConnection *connect_hostname(NeubotProtocol *,
+	    const char *, const char *, const char *);
 
-		Protocol *get_protocol(void);
+	NeubotProtocol *get_protocol(void);
 
-		int set_timeout(double);
+	int set_timeout(double);
 
-		int clear_timeout(void);
+	int clear_timeout(void);
 
-		int start_tls(unsigned int);
+	int start_tls(unsigned int);
 
-		int read(char *, size_t);
-		int readline(char *, size_t);
-		int readn(char *, size_t);
-		int discardn(size_t);
-		int write(const char *, size_t);
-		int puts(const char *);
+	int read(char *, size_t);
+	int readline(char *, size_t);
+	int readn(char *, size_t);
+	int discardn(size_t);
+	int write(const char *, size_t);
+	int puts(const char *);
 
-		// Required to implement net.stream.Connector
-		long long steal_fileno_(void);
+	// Required to implement net.stream.Connector
+	long long steal_fileno_(void);
 
-		// Internally-used zero-copy read and write
+	// Internally-used zero-copy read and write
 #ifndef SWIG
-		int read_into_(evbuffer *);
-		int write_from_(evbuffer *);
+	int read_into_(evbuffer *);
+	int write_from_(evbuffer *);
 #endif
 
-		int enable_read(void);
-		int disable_read(void);
+	int enable_read(void);
+	int disable_read(void);
 
-		void close(void);
-	};
-}
+	void close(void);
+};
 
 # endif  /* __cplusplus */
 #endif  /* LIBNEUBOT_CONNECTION_H */

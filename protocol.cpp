@@ -29,7 +29,7 @@
 
 // Defined here to avoid -Wweak-vtables warning
 NeubotPoller *
-Neubot::Protocol::get_poller(void)
+NeubotProtocol::get_poller(void)
 {
 	return (NULL);  // TODO: override
 }

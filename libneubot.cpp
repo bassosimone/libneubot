@@ -190,7 +190,8 @@ NeubotPollable_close(NeubotPollable *self)
 // Protocol
 //
 
-struct NeubotProtocol : public Neubot::Protocol {
+struct NeubotProtocolWrapper : public NeubotProtocol {
+
 	NeubotPoller *poller;
 	neubot_slot_vo fn_connect;
 	neubot_slot_vo fn_ssl;
@@ -200,10 +201,10 @@ struct NeubotProtocol : public Neubot::Protocol {
 	neubot_slot_vo fn_error;
 	void *opaque;
 
-	NeubotProtocol(NeubotPoller *p, neubot_slot_vo slot_connect,
+	NeubotProtocolWrapper(NeubotPoller *p, neubot_slot_vo slot_connect,
 	    neubot_slot_vo slot_ssl, neubot_slot_vo slot_data,
 	    neubot_slot_vo slot_flush, neubot_slot_vo slot_eof,
-	    neubot_slot_vo slot_error, void *o) {
+	    neubot_slot_vo slot_error, void *o) : NeubotProtocol() {
 		this->poller = p;
 		this->fn_connect = slot_connect;
 		this->fn_ssl = slot_ssl;
@@ -250,7 +251,7 @@ struct NeubotProtocol : public Neubot::Protocol {
 
 // Defined here to avoid -Wweak-vtables warning
 NeubotPoller *
-NeubotProtocol::get_poller(void)
+NeubotProtocolWrapper::get_poller(void)
 {
 	return (this->poller);
 }
@@ -264,8 +265,8 @@ NeubotProtocol_construct(NeubotPoller *p, neubot_slot_vo slot_connect,
 	if (p == NULL)
 		abort();
 
-	return (new (std::nothrow) NeubotProtocol(p, slot_connect, slot_ssl,
-	    slot_data, slot_flush, slot_eof, slot_error, o));
+	return (new (std::nothrow) NeubotProtocolWrapper(p, slot_connect,
+	    slot_ssl, slot_data, slot_flush, slot_eof, slot_error, o));
 }
 
 NeubotPoller *
@@ -290,31 +291,25 @@ NeubotProtocol_destruct(NeubotProtocol *self)
 // Connection
 //
 
-struct NeubotConnection : public Neubot::Connection {
-	// nothing
-};
-
 NeubotConnection *
 NeubotConnection_attach(NeubotProtocol *proto, long long filenum)
 {
-	return (static_cast<NeubotConnection *>(
-	    NeubotConnection::attach(proto, filenum)));
+	return (NeubotConnection::attach(proto, filenum));
 }
 
 NeubotConnection *
 NeubotConnection_connect(NeubotProtocol *proto, const char *family,
     const char *address, const char *port)
 {
-	return (static_cast<NeubotConnection *>(
-	    NeubotConnection::connect(proto, family, address, port)));
+	return (NeubotConnection::connect(proto, family, address, port));
 }
 
 NeubotConnection *
 NeubotConnection_connect_hostname(NeubotProtocol *proto, const char *family,
     const char *address, const char *port)
 {
-	return (static_cast<NeubotConnection *>(
-	    NeubotConnection::connect_hostname(proto, family, address, port)));
+	return (NeubotConnection::connect_hostname(proto,
+	    family, address, port));
 }
 
 NeubotProtocol *
@@ -465,15 +460,10 @@ NeubotConnection_close(NeubotConnection *self)
 // StringVector
 //
 
-struct NeubotStringVector : public Neubot::StringVector {
-	// nothing
-};
-
 NeubotStringVector *
 NeubotStringVector_construct(NeubotPoller *poller, size_t count)
 {
-	return (static_cast<NeubotStringVector *>(
-	    NeubotStringVector::construct(poller, count)));
+	return (new (std::nothrow) NeubotStringVector(poller, count));
 }
 
 int

@@ -32,22 +32,20 @@
 
 struct NeubotPoller;
 
-namespace Neubot {
-	class StringVector {
-		char **base;
-		size_t count;
-		size_t iter;
-		size_t pos;
-		NeubotPoller *poller;
-		StringVector(void);
-	    public:
-		static StringVector *construct(NeubotPoller *, size_t);
-		int append(const char *);
-		NeubotPoller *get_poller(void);
-		const char *get_next(void);
-		~StringVector(void);
-	};
-}
+struct NeubotStringVector {
+    private:
+	char **base;
+	size_t count;
+	size_t iter;
+	size_t pos;
+	NeubotPoller *poller;
+    public:
+	NeubotStringVector(NeubotPoller *, size_t);
+	int append(const char *);
+	NeubotPoller *get_poller(void);
+	const char *get_next(void);
+	~NeubotStringVector(void);
+};
 
 # endif  /* __cplusplus */
 #endif  /* LIBNEUBOT_STRINGVECTOR_H */
