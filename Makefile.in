@@ -47,6 +47,7 @@ REALNAME = $(SONAME).$(MINOR)
 PYMODULE = libneubot.py
 
 HEADERS = \
+    bytes.h \
     connection.h \
     log.h \
     protocol.h \
@@ -54,6 +55,7 @@ HEADERS = \
     neubot.h
 
 OBJECTS = \
+    bytes.o \
     connection.o \
     echo.o \
     http_parser.o \
@@ -69,6 +71,8 @@ OBJECTS = \
 $(REALNAME): $(OBJECTS)
 	$(CXX) $(LDFLAGS) $(OBJECTS) -o $(REALNAME) $(LIBS)
 
+bytes.o: bytes.cpp
+	$(CXX) $(CXXFLAGS) -o bytes.o -c bytes.cpp
 connection.o: connection.cpp
 	$(CXX) $(CXXFLAGS) -o connection.o -c connection.cpp
 echo.o: echo.c
