@@ -1,3 +1,7 @@
+/* libneubot/http.h */
+
+// A copy of http.h to copy the implementation
+
 /*-
  * Copyright (c) 2014
  *     Nexa Center for Internet & Society, Politecnico di Torino (DAUIN)
@@ -19,8 +23,8 @@
  * along with Neubot.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef NEUBOT_HTTP_HH
-# define NEUBOT_HTTP_HH
+#ifndef LIBNEUBOT_HTTP_HH
+# define LIBNEUBOT_HTTP_HH
 
 #include <sys/queue.h>
 
@@ -569,4 +573,4 @@ class Http : public Protocol {
 };
 
 #endif  /* __cplusplus */
-#endif  /* NEUBOT_HTTP_HH */
+#endif  /* LIBNEUBOT_HTTP_HH */
