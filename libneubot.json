@@ -18,6 +18,16 @@
             ["void", "break_loop"]
         ]],
 
+        ["NeubotStringBuffer", [
+            ["__construct__", "construct", ["NeubotPoller_p", "poller"]],
+            ["status_t", "append", ["cstring", "b"], ["size_t", "n"]],
+            ["cstring", "get_string"],
+            ["size_t", "get_length"],
+            ["status_t", "clear"],
+            ["NeubotPoller_p", "get_poller"],
+            ["__destruct__", "destruct"]
+        ]],
+
         ["NeubotStringVector", [
             ["__construct__", "construct", ["NeubotPoller_p", "poller"],
              ["size_t", "count"]],

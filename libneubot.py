@@ -96,6 +96,20 @@ class ProtocolBase(object):
             obj.voidp_ = ctypes.c_void_p(obj.context_)
         return obj.voidp_
 
+class StringBufferBase(object):
+
+    def __init__(self):
+        self.context_ = None
+        self.voidp_ = None
+
+    @classmethod
+    def from_param(cls, obj):
+        if not isinstance(obj, cls):
+            raise RuntimeError('invalid cast')
+        if not obj.voidp_:
+            obj.voidp_ = ctypes.c_void_p(obj.context_)
+        return obj.voidp_
+
 class StringVectorBase(object):
 
     def __init__(self):
@@ -645,6 +659,56 @@ LIBNEUBOT.NeubotProtocol_destruct.argtypes = (
 
 
 
+LIBNEUBOT.NeubotStringBuffer_construct.restype = ctypes.c_void_p
+LIBNEUBOT.NeubotStringBuffer_construct.argtypes = (
+    PollerBase,
+)
+
+
+
+LIBNEUBOT.NeubotStringBuffer_append.restype = ctypes.c_int
+LIBNEUBOT.NeubotStringBuffer_append.argtypes = (
+    StringBufferBase,
+    ctypes.c_char_p,
+    ctypes.c_size_t,
+)
+
+
+
+LIBNEUBOT.NeubotStringBuffer_get_string.restype = ctypes.c_char_p
+LIBNEUBOT.NeubotStringBuffer_get_string.argtypes = (
+    StringBufferBase,
+)
+
+
+
+LIBNEUBOT.NeubotStringBuffer_get_length.restype = ctypes.c_size_t
+LIBNEUBOT.NeubotStringBuffer_get_length.argtypes = (
+    StringBufferBase,
+)
+
+
+
+LIBNEUBOT.NeubotStringBuffer_clear.restype = ctypes.c_int
+LIBNEUBOT.NeubotStringBuffer_clear.argtypes = (
+    StringBufferBase,
+)
+
+
+
+LIBNEUBOT.NeubotStringBuffer_get_poller.restype = ctypes.c_void_p
+LIBNEUBOT.NeubotStringBuffer_get_poller.argtypes = (
+    StringBufferBase,
+)
+
+
+
+LIBNEUBOT.NeubotStringBuffer_destruct.argtypes = (
+    StringBufferBase,
+)
+
+
+
 LIBNEUBOT.NeubotStringVector_construct.restype = ctypes.c_void_p
 LIBNEUBOT.NeubotStringVector_construct.argtypes = (
     PollerBase,
@@ -937,6 +1001,39 @@ class Protocol(ProtocolBase):
             return
         _ctypes.Py_DECREF(self)
         LIBNEUBOT.NeubotProtocol_destruct(self)
+        self.context_ = None
+
+
+
+class StringBuffer(StringBufferBase):
+
+    def __init__(self, poller):
+        StringBufferBase.__init__(self)
+        self.context_ = LIBNEUBOT.NeubotStringBuffer_construct(poller)
+        if not self.context_:
+            DIE(1)
+        _ctypes.Py_INCREF(self)
+
+    def append(self, b, n):
+        return LIBNEUBOT.NeubotStringBuffer_append(self, b, n)
+
+    def get_string(self):
+        return LIBNEUBOT.NeubotStringBuffer_get_string(self)
+
+    def get_length(self):
+        return LIBNEUBOT.NeubotStringBuffer_get_length(self)
+
+    def clear(self):
+        return LIBNEUBOT.NeubotStringBuffer_clear(self)
+
+    def get_poller(self):
+        return LIBNEUBOT.NeubotStringBuffer_get_poller(self)
+
+    def destruct(self):
+        if not self.context_:
+            return
+        _ctypes.Py_DECREF(self)
+        LIBNEUBOT.NeubotStringBuffer_destruct(self)
         self.context_ = None
 
 

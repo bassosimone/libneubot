@@ -37,6 +37,7 @@
 #include "neubot.h"
 #include "protocol.h"
 #include "pollable.hh"
+#include "stringbuffer.h"
 #include "stringvector.h"
 
 //
@@ -495,6 +496,70 @@ NeubotStringVector_get_next(NeubotStringVector *self)
 
 void
 NeubotStringVector_destruct(NeubotStringVector *self)
+{
+	if (self == NULL)
+		abort();
+
+	delete (self);
+}
+
+//
+// StringBuffer
+//
+
+NeubotStringBuffer *
+NeubotStringBuffer_construct(NeubotPoller *poller)
+{
+	return (new (std::nothrow) NeubotStringBuffer(poller));
+}
+
+int
+NeubotStringBuffer_append(NeubotStringBuffer *self, const char *s, size_t n)
+{
+	if (self == NULL)
+		abort();
+
+	return (self->append(s, n));
+}
+
+const char *
+NeubotStringBuffer_get_string(NeubotStringBuffer *self)
+{
+	if (self == NULL)
+		abort();
+
+	return (self->get_string());
+}
+
+size_t
+NeubotStringBuffer_get_length(NeubotStringBuffer *self)
+{
+	if (self == NULL)
+		abort();
+
+	return (self->get_length());
+}
+
+int
+NeubotStringBuffer_clear(NeubotStringBuffer *self)
+{
+	if (self == NULL)
+		abort();
+
+	return (self->clear());
+}
+
+NeubotPoller *
+NeubotStringBuffer_get_poller(NeubotStringBuffer *self)
+{
+	if (self == NULL)
+		abort();
+
+	return (self->get_poller());
+}
+
+void
+NeubotStringBuffer_destruct(NeubotStringBuffer *self)
 {
 	if (self == NULL)
 		abort();
