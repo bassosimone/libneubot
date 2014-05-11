@@ -25,6 +25,9 @@
 # define LIBNEUBOT_HTTP_HH
 # ifdef __cplusplus
 
+struct NeubotBytes;
+struct NeubotStringBuffer;
+
 struct NeubotHttpHandler {
 	virtual void on_message_begin(void) {
 		// TODO: override
@@ -60,40 +63,28 @@ struct NeubotHttpHandler {
 
 struct NeubotHttp : public NeubotProtocol {
 
-	Buffer *body;
-	Buffer *buffer;
+	evbuffer *buffer;
 	NeubotConnection *connection;
 	HttpHandler *handler;
 	struct evkeyvalq *headers;
-	Buffer *key;
+	NeubotStringBuffer *key;
 	http_parser *parser;
 	unsigned prev;
-	Buffer *reason;
+	NeubotStringBuffer *reason;
 	http_parser_settings *settings;
-	Buffer *url;
-	Buffer *value;
+	NeubotStringBuffer *url;
+	NeubotStringBuffer *value;
 
-	static int on_message_begin(http_parser *parser) {
-		NeubotHttp *self = (NeubotHttp *) parser->data;
-		this->handler->on_message_begin();
-		return (0);
-	}
-
+	static int on_message_begin(http_parser *parser);
 	static int on_url(http_parser *, const char *, size_t);
-
 	static int on_status(http_parser *, const char *, size_t);
 
 	int headers_fsm(unsigned, const char *, size_t);
 
 	static int on_header_field(http_parser *, const char *, size_t);
-
 	static int on_header_value(http_parser *, const char *, size_t);
 
-	static int on_headers_complete(http_parser *parser) {
-		NeubotHttp *self = (NeubotHttp *) parser->data;
-		this->handler->on_headers_complete();
-		return (0);
-	}
+	static int on_headers_complete(http_parser *parser);
 
 	static int on_body(http_parser *parser, const char *b, size_t n) {
 		NeubotBytes chunk(b, n);
@@ -112,18 +103,10 @@ struct NeubotHttp : public NeubotProtocol {
 	NeubotHttp(void);
 
 	virtual void on_data(void);
-
 	virtual void on_flush(void);
-
-	void on_eof(void);
-
-	void on_error(void);
-
-	//
-	// Accessors:
-	//
-
-	NeubotPoller *get_poller(void);
+	virtual void on_eof(void);
+	virtual void on_error(void);
+	virtual NeubotPoller *get_poller(void);
 
 	NeubotConnection *get_connection(void);
 
