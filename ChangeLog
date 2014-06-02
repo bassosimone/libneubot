@@ -22,6 +22,7 @@ LibNeubot 3.1.0 [2014-06-01]
 	* Related to the previous change: test/self_connection.py uses
 	  NeubotConnection::foo_readbuf() methods, which write data directly to
 	  the read_buffer, allowing tests without a real connection.
+	  
 LibNeubot 3.0.0 [2014-05-04]
 	* Rewrite NeubotPollable now that I know that, in C++, a structure can
 	  inherit from a class. As a result, the FooState structure is now gone
@@ -48,6 +49,7 @@ LibNeubot 3.0.0 [2014-05-04]
 	  because it was not typesafe (we passed integers to functions in
 	  hope that they were pointer to the right C/C++ objects).
 	* More minor changes, fixes and tweaks.
+	
 LibNeubot 2.0.0 [2014-04-11]
 	* Add Android.mk to compile a static library for Android
 	* Remove the unused LibNeubot.java/gen_java thing
