@@ -2,27 +2,23 @@ LibNeubot 3.1.0 [2014-06-01]
 	* Add the NeubotConnection module, that provides an abstraction,
 	  representing a stream-like network connection. This module provides
 	  various static constructors, which allow the user to establish a
-	  connection providing different parameters: connect(), 
+	  connection providing different parameters: connect(),
 	  connect_hostname() and attach(). This module provides also different
 	  methods to read and write data over the connection.
 	* Related to the previous change: add the StringVector module, useful
 	  to implement connect_hostname() static constructor.
-	* Related to the previous change: the protocol family of the connection
-	  can be either IPv4 or IPv6 and, if unspecified, the priority can be
-	  given to both of them.
-	* Rewrite the C++-to-C glue code: the wrapper struct inherits from a
-	  another struct (with some private methods and attributes), instead of 
-	  a class.
+	* Related to the previous change: one can choose whether IPv4 takes the
+	  priority over IPv6, or the other way round.
+	* Rewrite the C++-to-C glue code to use a structure rather than a class
+	  (since we understood that we can use structures and classes
+	  interchangeably and structures are more easily exported to C).
 	* Improvements in gen_python, which now supports static constructors
-	  (which have to be explicitly declared in libneubot.json).
-	  Additionally, if a class has a getter method of an object passed as a
-	  parameter to the constructor, the getter returns it, instead of
-	  calling the wrapper function.
+	  and proper getter methods.
 	* Add tests for the NeubotStringVector and the NeubotConnection modules.
 	* Related to the previous change: test/self_connection.py uses
 	  NeubotConnection::foo_readbuf() methods, which write data directly to
 	  the read_buffer, allowing tests without a real connection.
-	  
+
 LibNeubot 3.0.0 [2014-05-04]
 	* Rewrite NeubotPollable now that I know that, in C++, a structure can
 	  inherit from a class. As a result, the FooState structure is now gone
@@ -49,7 +45,7 @@ LibNeubot 3.0.0 [2014-05-04]
 	  because it was not typesafe (we passed integers to functions in
 	  hope that they were pointer to the right C/C++ objects).
 	* More minor changes, fixes and tweaks.
-	
+
 LibNeubot 2.0.0 [2014-04-11]
 	* Add Android.mk to compile a static library for Android
 	* Remove the unused LibNeubot.java/gen_java thing
@@ -60,7 +56,7 @@ LibNeubot 2.0.0 [2014-04-11]
 	  neubot/neubot_android repository
 	* Make sure gen_cxx generates code that works on Android: correct
 	  the order of the generated classes, replace the nonworking cast with
-          the invocation of the ->pointer() method
+	  the invocation of the ->pointer() method
 	* Unify gen_py/gen_python and libneubot.py/libneubot1.py: now
 	  gen_python generates a libneubot.py file that contains the old
 	  stuff plus the stuff that was in libneubot1.py, moreover, the
