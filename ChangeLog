@@ -1,4 +1,4 @@
-LibNeubot 3.1.0 [2014-05-??]
+LibNeubot 3.1.0 [2014-06-01]
 	* Add the NeubotConnection module, that provides an abstraction,
 	  representing a stream-like network connection. This module provides
 	  various static constructors, which allow the user to establish a
